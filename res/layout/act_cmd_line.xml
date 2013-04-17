@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 通信控制界面-命令行模式 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
+
+	<!-- 顶部数据统计状态条 -->
+    <include android:id="@+id/include_data_count_area"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/bar_data_count" />
+    
+	<!-- 数据发送区 -->
+    <AutoCompleteTextView android:id="@+id/actCmdLine_actv_input"
+        android:hint="@string/actCmdLine_input_hint"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:completionThreshold="2"
+        android:layout_alignParentBottom="true"
+        android:imeOptions="actionSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <requestFocus />
+    </AutoCompleteTextView>
+    
+    <!-- 数据接收区 -->
+    <ScrollView android:id="@+id/actCmdLine_sv_Scroll"
+        android:layout_below="@id/include_data_count_area"
+        android:layout_above="@id/actCmdLine_actv_input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical">
+        <TextView android:id="@+id/actCmdLine_tv_data_view"
+            android:text="@string/actCmdLine_msg_helper"
+            android:singleLine="false"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+    </ScrollView>
+</RelativeLayout>

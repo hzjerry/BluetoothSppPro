@@ -1,0 +1,5 @@
+Byte stream communication mode introduced:
+    Need to send in the bottom of the input box to enter data, click on the right button to complete the send.
+    Received the information, choose ASCII or HEX display;
+    If you want to enter a non-ASCII character sets, use the HEX entered.
+    If you want to send commands (such as in the end, add '\ r \ n') then use [Command line mode] to communicate after each instruction plus terminator.

@@ -1,0 +1,3 @@
+Command-line communication mode introduced:
+    The definition of the sending and receiving end (for example: '\r\n') in the send commands will automatically append the termination character, and then wait for the host response.
+    Host response content must termination character closing, otherwise the receiver thread will content has been stored in the cache, and will not be displayed on the screen.

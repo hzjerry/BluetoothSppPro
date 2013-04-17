@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 数据量统计状态条 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+    <TextView android:id="@+id/tv_txd_count"
+        android:text="@string/templet_txd"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#23B129"
+        android:gravity="center_horizontal"
+        />
+    <TextView android:id="@+id/tv_rxd_count"
+        android:text="@string/templet_rxd"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#007AFF"
+        android:textColor="#FFFFFF"
+        android:gravity="center_horizontal"
+        />
+    <TextView android:id="@+id/tv_connect_hold_time"
+        android:text="@string/templet_hold_time"
+        android:singleLine="true"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#FFDA21"
+        android:gravity="center_horizontal"
+        />
+</LinearLayout>

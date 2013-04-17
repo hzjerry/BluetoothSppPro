@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+	<LinearLayout
+	  android:orientation="horizontal"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content">
+	    <TextView
+	    	android:text="@string/actKeyBoard_tv_set_btnname"
+	    	android:layout_weight="3" 
+	    	android:singleLine="true"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" />
+	    <EditText android:id="@+id/et_keyboard_set_BtnName"
+	    	android:hint="@string/actKeyBoard_tv_set_btnname_hint"
+	    	android:singleLine="true"
+	    	android:layout_weight="1" 
+	    	android:layout_height="wrap_content"	    	
+	    	android:layout_width="fill_parent">
+	        <requestFocus></requestFocus>
+	    </EditText>
+	</LinearLayout>
+	
+	<LinearLayout
+	  android:orientation="horizontal"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content">
+	    <TextView
+	    	android:text="@string/actKeyBoard_set_send_value"
+	    	android:layout_weight="3" 
+	    	android:singleLine="true"
+	    	android:layout_width="fill_parent"
+	    	android:layout_height="wrap_content" />
+	    <EditText android:id="@+id/et_keyboard_set_SendValue"
+	    	android:hint="@string/actKeyBoard_set_send_value_hint"
+	    	android:singleLine="true"
+	    	android:layout_weight="1" 
+	    	android:layout_height="wrap_content"	    	
+	    	android:layout_width="fill_parent" />
+	</LinearLayout>
+</LinearLayout>

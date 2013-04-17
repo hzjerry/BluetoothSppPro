@@ -1,0 +1,30 @@
+Software Description:
+The software for the Bluetooth client communication tools (ie: Bluetooth slave mode), Bluetooth serial communication can be tested. Can connect a Bluetooth MCU and PC serial port.
+
+Software features:
+     1. Search for Bluetooth devices, and displays the class and RSSI (signal strength);
+     2. The use of serial communication, receiving and sending data;
+     3. Can be set to ASCII and HEX input and output mode;
+     4. The data results can be saved to the SD card(/sdcard/BLE_SPP_PRO/...).
+     5. Can search for Bluetooth low energy devices (nothing more)
+     
+This tool three modules:
+     1. Byte stream mode: the basic input-output model;
+     2. Keyboard mode: Can customize the output value of 12 buttons;
+     3. Command Line: Set the command terminator for communication debugging.
+
+If the connected Bluetooth device is not paired, the system will automatically prompt you for pairing. Bluetooth pairing is successful, try to connect again.
+
+This can only connect Bluetooth serial module devices, Bluetooth devices are generally used for MCU serial communication.
+
+System using the Bluetooth pairing means: [menu-> Settings -> Wireless and Network -> Bluetooth Settings], open the Bluetooth feature, and to search for Bluetooth devices to pair, paired with a device only once.
+
+Bluetooth server settings (ie: Bluetooth host):
+If you use this tool to communicate with the MCU, set the single-chip Bluetooth communications parameters configured for 9600, N, 8,1 (you know).
+
+Special cases:
+Non-normal end of the Bluetooth function, may lead to not be able to connect Bluetooth devices such as this is the case, please restart the phone can often return to normal.
+
+Contact the author (Welcome to AC):
+    WeiBo: http://weibo.com/hzjerry
+    Email: lijian@gmail.com

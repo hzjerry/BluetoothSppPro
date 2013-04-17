@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	>
+	
+    <!-- 顶部数据统计状态条 -->
+    <include android:id="@+id/include_data_count_area"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/bar_data_count" />
+
+	<!-- 键盘区 -->
+    <LinearLayout android:id="@+id/actKeyBoard_ll_ctrl_area"
+    	android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+		<LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+		    <mobi.dzs.android.control.button.RepeatingButton
+		        android:id="@+id/btn_keyboard_1"
+		        android:text="@string/btn_click_me" 
+		        android:layout_weight="1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"/>
+		    <mobi.dzs.android.control.button.RepeatingButton
+		        android:id="@+id/btn_keyboard_2"
+		        android:text="@string/btn_click_me" 
+		        android:layout_weight="1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"/>
+		    <mobi.dzs.android.control.button.RepeatingButton
+		        android:id="@+id/btn_keyboard_3"
+		        android:text="@string/btn_click_me" 
+		        android:layout_weight="1"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_4"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_5"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_6"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_7"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_8"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_9"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_10"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_11"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <mobi.dzs.android.control.button.RepeatingButton
+                android:id="@+id/btn_keyboard_12"
+                android:text="@string/btn_click_me" 
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+    
+    <!-- 数据显示区 -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@id/include_data_count_area"
+        android:layout_above="@id/actKeyBoard_ll_ctrl_area"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        
+        <!-- 数据接收显示区 -->
+        <RelativeLayout android:id="@+id/actKeyBoard_rl_receive_area"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+            <TextView android:id="@+id/actKeyBoard_tv_receive_area_title"
+                android:text="@string/tv_receive_area_title"
+                android:background="#DDDDDD"
+                android:layout_alignParentTop="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+            <ScrollView android:id="@+id/actKeyBoard_sv_receive_data_scroll"
+                android:layout_below="@id/actKeyBoard_tv_receive_area_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:scrollbars="vertical"
+                android:fadingEdge="vertical">
+	            <TextView android:id="@+id/actKeyBoard_tv_receive_show" 
+	                android:text="@string/msg_receive_data_wating"
+	                android:singleLine="false"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"/>
+            </ScrollView>
+        </RelativeLayout>
+        
+        <!-- 数据发送显示区 -->
+        <RelativeLayout android:id="@+id/actKeyBoard_rl_send_area"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+            <TextView android:id="@+id/actKeyBoard_tv_send_area_title"
+                android:text="@string/tv_send_area_title"
+                android:background="#DDDDDD"
+                android:layout_alignParentTop="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onclick_ctrlSendAreaDisplay"/>
+            <ScrollView android:id="@+id/actKeyBoard_sv_send_data_scroll"
+                android:layout_below="@id/actKeyBoard_tv_send_area_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+                android:scrollbars="vertical"
+                android:fadingEdge="vertical">
+	            <TextView android:id="@+id/actKeyBoard_tv_send_data_show" 
+	                android:text="@string/actKeyBoard_tv_Init"
+	                android:singleLine="false"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"/>
+            </ScrollView>
+        </RelativeLayout>
+    </LinearLayout>
+    
+</RelativeLayout>

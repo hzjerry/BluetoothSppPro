@@ -1,0 +1,4 @@
+Keyboard communication mode introduced:
+    A total of 12 buttons, each button to set a single instruction to automatically issue commands when the button is pressed.
+    First use, please click menu [Buttons set], and one by one to define the function of the button. Definition is complete, click the menu [Buttons set complete] back to normal the sending state.
+    Press continued to send the transmission frequency of the function to set the configuration menu, send frequency> 50ms (recommended 100ms ~ 500ms)

@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<LinearLayout android:id="@+id/actMain_ll_device_ctrl"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="5dip"
+		android:orientation="vertical"
+		>
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/actMain_link_device_info_title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView android:id="@+id/actMain_tv_device_info"
+            android:layout_marginLeft="10dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/actMain_device_info" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/actMain_link_device_service_uuid"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView android:id="@+id/actMain_tv_service_uuid"
+            android:layout_marginLeft="10dip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/actMain_find_service_uuids"
+             />
+	</LinearLayout>
+	
+	<!-- 配对与连接处理 -->
+    <LinearLayout android:id="@+id/actMain_ll_pair_or_comm"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:orientation="horizontal"
+        >
+        <Button android:id="@+id/actMain_btn_pair"
+        	style="?android:attr/buttonStyleSmall"
+        	android:layout_weight="1"
+        	android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:onClick="onClickBtnPair"
+        	android:text="@string/actMain_btn_pair" />
+        
+        <Button android:id="@+id/actMain_btn_conn"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_weight="1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBtnConn"
+            android:text="@string/actMain_btn_comm" />
+    </LinearLayout>
+    
+    <!-- 启动选择模式 -->
+    <LinearLayout android:id="@+id/actMain_ll_choose_mode"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/actMain_tv_select_mode"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickBtnSerialStreamMode"
+            android:text="@string/actByteStream_name" />
+        
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        >
+		        <Button
+		            style="?android:attr/buttonStyleSmall"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:onClick="onClickBtnKeyBoardMode"
+		            android:layout_weight="1"
+		            android:text="@string/actKeyBoard_name" />
+		        
+		        <Button
+		            style="?android:attr/buttonStyleSmall"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:onClick="onClickBtnCommandLine"
+		            android:layout_weight="1"
+		            android:text="@string/actCmdLine_name" />
+        </LinearLayout>    
+    </LinearLayout>    
+
+</LinearLayout>

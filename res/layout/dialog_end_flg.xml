@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 输入输出模式选择 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+	<LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:orientation="vertical"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content">
+	    <TextView
+	    	android:text="@string/dialog_end_flg_select"
+	    	android:layout_width="wrap_content"
+	    	android:layout_height="wrap_content" />
+		<RadioGroup android:id="@+id/rg_end_flg"
+		        android:orientation="horizontal"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        >
+		        <RadioButton android:id="@+id/rb_end_flg_set_rn"
+		        	android:text="@string/dialog_end_flg_rn"
+		        	android:checked="true"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+		        <RadioButton android:id="@+id/rb_end_flg_set_n"
+	                android:text="@string/dialog_end_flg_n"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+		        <RadioButton android:id="@+id/rb_end_flg_set_other"
+	                android:text="@string/dialog_end_flg_other"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content" />
+		</RadioGroup>
+	</LinearLayout>
+	
+    <!--分隔线-->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/hr_gray_white"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"
+        android:layout_height="1dip" />
+      <TextView
+          android:text="@string/dialog_end_flg_hex_val"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content" />
+	   <EditText android:id="@+id/et_end_flg_val"
+	   	android:hint="@string/actCmdLine_et_hint_end_flg_val"
+	   	android:layout_width="match_parent"
+	   	android:layout_height="wrap_content"
+	   	/>
+</LinearLayout>
