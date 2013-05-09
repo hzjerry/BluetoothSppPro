@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -104,7 +105,7 @@ public class actDiscovery extends Activity
 	/**
 	 * Bluetooth scanning is finished processing.(broadcast listener)
 	 */
-	private BroadcastReceiver _finshedReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver _finshedReceiver = new BroadcastReceiver(){
 
 		@Override
 		public void onReceive(Context context, Intent intent)
@@ -214,6 +215,7 @@ public class actDiscovery extends Activity
 	/**
 	 * 开始扫描周围的蓝牙设备<br/>
 	 *  备注:进入这步前必须保证蓝牙设备已经被启动
+	 *  @return void
 	 * */
 	private void startSearch()
 	{
@@ -237,20 +239,27 @@ public class actDiscovery extends Activity
 	
 	/**
 	 * 将设备类型ID，转换成设备解释字符串
+	 * @return String
 	 * */
 	private String toDeviceTypeString(String sDeviceTypeId)
 	{
-        switch(Integer.valueOf(sDeviceTypeId))
-        {
-        	case DEVICE_TYPE_BREDR:
-        		return getString(R.string.device_type_bredr);
-        	case DEVICE_TYPE_BLE:
-        		return getString(R.string.device_type_ble);
-        	case DEVICE_TYPE_DUMO:
-        		return getString(R.string.device_type_dumo);
-        	default: //默认为蓝牙2.0
-        		return getString(R.string.device_type_bredr);
-        }
+		Pattern pt = Pattern.compile("^[-\\+]?[\\d]+$");
+		if (pt.matcher(sDeviceTypeId).matches())
+		{
+	        switch(Integer.valueOf(sDeviceTypeId))
+	        {
+	        	case DEVICE_TYPE_BREDR:
+	        		return getString(R.string.device_type_bredr);
+	        	case DEVICE_TYPE_BLE:
+	        		return getString(R.string.device_type_ble);
+	        	case DEVICE_TYPE_DUMO:
+	        		return getString(R.string.device_type_dumo);
+	        	default: //默认为蓝牙2.0
+	        		return getString(R.string.device_type_bredr);
+	        }
+		}
+		else
+			return sDeviceTypeId; //如果不是数字，则直接输出
 	}
 
 	/* Show devices list */
@@ -377,7 +386,9 @@ public class actDiscovery extends Activity
 		@Override
 		public void onPostExecute(Integer result)
 		{
-			this.mpd.dismiss();//关闭等待对话框
+			if (this.mpd.isShowing())
+				this.mpd.dismiss();//关闭等待对话框
+			
 			
 			if (mBT.isDiscovering())
 				mBT.cancelDiscovery();

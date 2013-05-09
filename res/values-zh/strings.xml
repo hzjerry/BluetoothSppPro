@@ -54,7 +54,6 @@
 	<string name="actKeyBoard_set_send_value_hint">点击后的发送值</string>
 	<string name="actKeyBoard_tv_set_keyboard_helper">当前为键盘设置模式，请点击按钮区中的按钮，设置每个按钮的属性。\n完成设置后点击菜单的【保存键盘配置】回到发送模式。\n</string>
 	<string name="actKeyBoard_msg_helper_endflg">当前结束符为 %1$s，如果需要更换指令结束符请选择菜单中的【设置结束符】进行设定；\n</string>
-	<string name="actKeyBoard_msg_helper_endflg_nothing">当前未设置结束符，如果需要更换指令结束符请选择菜单中的【设置结束符】进行设定；\n</string>
 	<string name="actKeyBoard_msg_repeat_freq_set">当前按钮长按时的促发频率为  %1$dms；</string>
 	
 	<string name="actAbout_name">关于</string>
@@ -109,6 +108,7 @@
 	<string name="msg_receive_data_wating">等待接收数据中&#8230;\n</string>
 	<string name="msg_receive_data_stop">数据接收终止</string>
 	<string name="msg_msg_bt_connect_lost">蓝牙设备的通信连接丢失，请尝试重新连接</string>
+	<string name="msg_helper_endflg_nothing">当前未设置结束符，如果需要更换指令结束符请选择菜单中的【设置结束符】进行设定；\n</string>
 	
 	<string name="tips_click_to_hide">点击后隐藏</string>
 	<string name="tips_click_to_show">点击后显示</string>

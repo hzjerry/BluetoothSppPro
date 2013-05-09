@@ -28,6 +28,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+/**
+ * 主界面<br />
+ * 维护蓝牙的连接与通信操作，首先进入后检查蓝牙状态，没有启动则开启蓝牙，然后立即进入搜索界面。<br/>
+ * 得到需要连接的设备后，在主界面中建立配对与连接，蓝牙对象被保存在globalPool中，以便其他的不同通信模式的功能模块调用。
+ * @author JerryLi
+ *
+ */
 public class actMain extends Activity
 {
 	/**CONST: scan device menu id*/
@@ -311,11 +318,11 @@ public class actMain extends Activity
 		else if (REQUEST_BYTE_STREAM == requestCode || REQUEST_CMD_LINE == requestCode ||
 				 REQUEST_KEY_BOARD == requestCode)
 		{	//从通信模式返回的处理
-			if (!mGP.mBSC.isConnect())
+			if (null == this.mGP.mBSC || !this.mGP.mBSC.isConnect())
 			{	//通信连接丢失，重新连接
 				this.mllChooseMode.setVisibility(View.GONE); //隐藏 通信模式选择
 				this.mbtnComm.setVisibility(View.VISIBLE); //显示 建立通信按钮
-				mGP.closeConn();//释放连接对象
+				this.mGP.closeConn();//释放连接对象
 				Toast.makeText(this, //提示连接丢失
 				   getString(R.string.msg_msg_bt_connect_lost),
 				   Toast.LENGTH_SHORT).show();
@@ -447,7 +454,8 @@ public class actMain extends Activity
 		@Override
 		public void onPostExecute(Integer result)
 		{
-			mpd.dismiss();//关闭等待对话框
+			if (mpd.isShowing())
+				mpd.dismiss();//关闭等待对话框
 			
 			if (RET_BLUETOOTH_START_FAIL == result)
 			{	//蓝牙设备启动失败

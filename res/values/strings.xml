@@ -54,7 +54,6 @@
 	<string name="actKeyBoard_set_send_value_hint">Click after sending</string>
 	<string name="actKeyBoard_tv_set_keyboard_helper">Now is the keyboard setting mode, Click the button area that setting.\n Click [Buttons set complete]back to send mode.\n</string>
 	<string name="actKeyBoard_msg_helper_endflg">Command line last chars is: %1$s;\n</string>
-	<string name="actKeyBoard_msg_helper_endflg_nothing">End flag is not set. Click [Set end flag] set;\n</string>
 	<string name="actKeyBoard_msg_repeat_freq_set">Long-press the trigger frequency: %1$dms;</string>
 	
 	<string name="actAbout_name">About me</string>
@@ -109,6 +108,7 @@
 	<string name="msg_receive_data_wating">Waiting to receive&#8230;\n</string>
 	<string name="msg_receive_data_stop">Receiver terminated</string>
 	<string name="msg_msg_bt_connect_lost">Bluetooth device communications connection is lost, try to reconnect</string>
+	<string name="msg_helper_endflg_nothing">End flag is not set. Click [Set end flag] set;\n</string>
 	
 	<string name="tips_click_to_hide">Click hidden</string>
 	<string name="tips_click_to_show">Click show</string>

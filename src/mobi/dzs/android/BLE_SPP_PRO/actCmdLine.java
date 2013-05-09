@@ -35,6 +35,8 @@ public class actCmdLine extends BaseCommActivity
 	private final static byte MEMU_SET_END_FLG = 0x21;
 	/**常量:结束符 动态存储用子关键字*/
 	private final static String SUB_KEY_END_FLG = "SUB_KEY_END_FLG";
+	/**常量:模块已经被使用过的标志(用于初始化)*/
+	private final static String SUB_KEY_MODULE_IS_USED = "SUB_KEY_MODULE_IS_USED";
 	/**当前使用的结束符*/
 	private String msEndFlg = msEND_FLGS[0];
 	/**控件:输入框*/
@@ -381,8 +383,16 @@ public class actCmdLine extends BaseCommActivity
     private void loadProfile()
     {
     	String sHexEndFlg = this.mDS.getStringVal(this.getLocalClassName(), SUB_KEY_END_FLG);
-    	if (sHexEndFlg.isEmpty()) //默认为(\r\n)
+    	//首次使用判断，默认第一次使用为false，取反则为true
+    	boolean bModuleIsUsed = this.mDS.getBooleanVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED);
+    	if (!bModuleIsUsed) //首次使用默认认为(\r\n)
+    	{
     		this.msEndFlg = msEND_FLGS[0];
+    		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true); //标记已经使用过
+    		this.mDS.saveStorage();
+    	}
+    	else if (sHexEndFlg.isEmpty())
+    		this.msEndFlg = ""; //未设置结束符
     	else
     		this.msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
     	this.showEndFlg(); //显示当前结束符的设置信息
@@ -413,10 +423,7 @@ public class actCmdLine extends BaseCommActivity
     	{
     		String sTmp = null;
     		if(msEndFlg.isEmpty())
-    		{
-    			sTmp = String.format(getString(R.string.actCmdLine_msg_helper), 
-    					"(Nothing)");
-    		}
+    			sTmp = getString(R.string.msg_helper_endflg_nothing);
     		else
     		{
     			sTmp = String.format(getString(R.string.actCmdLine_msg_helper), 

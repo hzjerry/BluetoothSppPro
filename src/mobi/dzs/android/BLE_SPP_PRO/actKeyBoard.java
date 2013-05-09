@@ -45,6 +45,8 @@ public class actKeyBoard extends BaseCommActivity
 	private final static byte MENU_SET_LONG_PASS_REPEAT = 0x24;
 	/**常量:结束符 动态存储用子关键字*/
 	private final static String SUB_KEY_END_FLG = "SUB_KEY_END_FLG";
+	/**常量:常量:模块已经被使用过的标志(用于初始化)*/
+	private final static String SUB_KEY_MODULE_IS_USED = "SUB_KEY_MODULE_IS_USED";
 	/**常量:按钮子键-按钮显示名*/
 	private final static String SUB_KEY_BTN_NAME = "SUB_KEY_BTN_NAME";
 	/**常量:按钮子键-按钮值*/
@@ -155,6 +157,15 @@ public class actKeyBoard extends BaseCommActivity
 				}
 			}
 		});
+		
+		/*默认启动时隐藏发送区*/
+		String sTitle = getString(R.string.tv_receive_area_title);
+		sTitle += "\t\t("+ getString(R.string.tips_click_to_show);
+		sTitle += ":"+ getString(R.string.tv_send_area_title) +")";
+		this.mtvRecAreaTitle.setText(sTitle);
+		this.mrlSendArea.setVisibility(View.GONE);
+		this.mrlSendArea.refreshDrawableState(); //刷新发送区
+		this.mbHideSendArea = true; //隐藏发送区
 		
     	//绑定键盘数组
     	mbtns[0] = (RepeatingButton)findViewById(R.id.btn_keyboard_1);//取得RepeatingButton对象
@@ -572,10 +583,10 @@ public class actKeyBoard extends BaseCommActivity
     private void selectButtonEvent()
     {
 	    /*菜单列表初始化*/
-	    String sList[] = new String[] {this.getString(R.string.menu_button_event_up),
+	    String sList[] = new String[]{this.getString(R.string.menu_button_event_up),
 	    							   this.getString(R.string.menu_button_event_down),
 	    							   this.getString(R.string.menu_button_event_repeat)
-	    							  };
+	    							 };
 	    /*构造选择框*/
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this); //对话框控件
 	    builder.setTitle(this.getString(R.string.menu_set_key_board_event));//设置标题
@@ -612,8 +623,16 @@ public class actKeyBoard extends BaseCommActivity
     private void loadProfile()
     {
     	String sHexEndFlg = this.mDS.getStringVal(this.getLocalClassName(), SUB_KEY_END_FLG);
-    	if (sHexEndFlg.isEmpty()) //默认为(\r\n)
+    	//首次使用判断，默认第一次使用为false，取反则为true
+    	boolean bModuleIsUsed = this.mDS.getBooleanVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED);
+    	if (!bModuleIsUsed) //首次使用默认认为(\r\n)
+    	{
     		this.msEndFlg = msEND_FLGS[0];
+    		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true); //标记已经使用过
+    		this.mDS.saveStorage();
+    	}
+    	else if (sHexEndFlg.isEmpty())
+    		this.msEndFlg = ""; //未设置结束符
     	else
     		this.msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
     	this.showEndFlg(); //显示当前结束符的设置信息
@@ -643,7 +662,7 @@ public class actKeyBoard extends BaseCommActivity
     	else
     	{
     		if (this.msEndFlg.isEmpty())
-    			this.mtvRecView.append(getString(R.string.actKeyBoard_msg_helper_endflg_nothing));
+    			this.mtvRecView.append(getString(R.string.msg_helper_endflg_nothing));
     		else
     		{
     			this.mtvRecView.append(
