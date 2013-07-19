@@ -20,21 +20,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 通信模式：字节流模式
+ * Communication modes: byte-stream mode
+ * @author JerryLi
  * */
 public class actByteStream extends BaseCommActivity
 {
-	/**控件:发送按钮*/
+	/**Control: the Send button*/
 	private ImageButton mibtnSend = null;
-	/**控件:输入框*/
+	/**Controls: input box*/
 	private AutoCompleteTextView mactvInput = null;
-	/**控件:数据接收区*/
+	/**Controls: data receive area*/
 	private TextView mtvReceive = null;
-	/**控件:卷屏控制控件*/
+	/**Control: Scroll screen control*/
 	private ScrollView msvCtl = null;
 	
 	/**
-	 * 页面构造
+	 * Page construction
 	 * */
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -42,20 +43,21 @@ public class actByteStream extends BaseCommActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_byte_stream);
 		
-		/*控件引用*/
+		/*Control reference*/
 		this.mibtnSend = (ImageButton)this.findViewById(R.id.actByteStream_btn_send);
 		this.mactvInput = (AutoCompleteTextView)this.findViewById(R.id.actByteStream_actv_input);
 		this.mtvReceive = (TextView)this.findViewById(R.id.actByteStream_tv_receive);
 		this.msvCtl = (ScrollView)this.findViewById(R.id.actByteStream_sv_Scroll);
 		
-		this.initCtl(); //初始化控件
-		this.loadAutoComplateCmdHistory(this.getLocalClassName(), this.mactvInput); //载入自动完成输入框的内容
+		this.initCtl(); //Initialize controls
+		//Loading the contents of the input box automatically
+		this.loadAutoComplateCmdHistory(this.getLocalClassName(), this.mactvInput);
 		
 		this.enabledBack(); //激活回退按钮
 		this.initIO_Mode(); //初始化输入输出模式
 		this.usedDataCount(); //启用数据统计状态条
 		
-		//初始化结束，启动接收线程
+		//Start receiving thread
 		new receiveTask()
 			.executeOnExecutor(FULL_TASK_EXECUTOR);
 	}
@@ -67,17 +69,18 @@ public class actByteStream extends BaseCommActivity
     public void onDestroy()
     {
     	super.onDestroy();
-    	this.saveAutoComplateCmdHistory(this.getLocalClassName()); //保存用于自动完成控件的命令历史字
+    	//Save for auto-complete control word command history
+    	this.saveAutoComplateCmdHistory(this.getLocalClassName());
     }
     
 	/**
-	 * 屏幕旋转时的处理
+	 * Screen rotation processing
 	 * */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
-		this.mactvInput.setInputType(InputType.TYPE_NULL); //旋转时关闭软键盘
+		this.mactvInput.setInputType(InputType.TYPE_NULL); //Close soft keyboard
 	}
 	
 	/**
@@ -101,7 +104,7 @@ public class actByteStream extends BaseCommActivity
     }
 	
 	/**
-	 * 菜单点击后的执行指令
+	 * Menu click execute instructions
 	 * */
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) 
@@ -110,23 +113,23 @@ public class actByteStream extends BaseCommActivity
         {
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
-	        	this.mbThreadStop = true; //终止接收线程
-	        	this.setResult(Activity.RESULT_CANCELED); //返回到主界面
+	        	this.mbThreadStop = true; //Termination of the receiving thread
+	        	this.setResult(Activity.RESULT_CANCELED); //Return to the main interface
 	        	this.finish();
 	        	return true;
-	        case MEMU_CLEAR: //清除屏幕
+	        case MEMU_CLEAR: //Clear the screen
 	        	this.mtvReceive.setText("");
 	        	return true;
-	        case MEMU_IO_MODE: //设定IO模式
+	        case MEMU_IO_MODE: //Set the IO mode
 	        	this.setIOModeDialog();
 	        	return true;
-	        case MEMU_SAVE_TO_FILE: //保存到文件
+	        case MEMU_SAVE_TO_FILE: //Saved to file
 	        	this.saveData2File();
 	        	return true;
-	        case MEMU_CLEAR_CMD_HISTORY: //清除历史命令
+	        case MEMU_CLEAR_CMD_HISTORY: //Clear History command
 	        	this.clearAutoComplate(this.mactvInput);
 	        	return true;
-	        case MEMU_HELPER: //显示使用向导
+	        case MEMU_HELPER: //Display using the wizard
 	        	if (this.getString(R.string.language).toString().equals("cn"))
 	        		this.mtvReceive.setText(this.getStringFormRawFile(R.raw.byte_stream_cn) +"\n\n");
 	        	else
@@ -193,7 +196,7 @@ public class actByteStream extends BaseCommActivity
     }
     
     /**
-     * 自动滚屏的处理
+     * Auto scroll processing
      * @return void
      * */
     private void autoScroll()
@@ -214,7 +217,7 @@ public class actByteStream extends BaseCommActivity
     }
     
     /**
-     * 发送按钮
+     * Send button event handler
      * */
     public void onClickBtnSend(View c)
     {
@@ -252,9 +255,9 @@ public class actByteStream extends BaseCommActivity
     /*多线程处理(建立蓝牙设备的串行通信连接)*/
     private class receiveTask extends AsyncTask<String, String, Integer>
     {
-    	/**常量:连接丢失*/
+    	/**Constant: the connection is lost*/
     	private final static byte CONNECT_LOST = 0x01;
-    	/**常量:线程任务结束*/
+    	/**Constant: the end of the thread task*/
     	private final static byte THREAD_END = 0x02;
 		/**
 		 * 线程启动初始化操作
@@ -275,8 +278,8 @@ public class actByteStream extends BaseCommActivity
 			mBSC.Receive(); //首次启动调用一次以启动接收线程
 			while(!mbThreadStop)
 			{
-				if (!mBSC.isConnect())
-					return CONNECT_LOST; //检查连接是否丢失
+				if (!mBSC.isConnect())//检查连接是否丢失
+					return CONNECT_LOST; 
 				
 				if (mBSC.getReceiveBufLen() > 0)
 					this.publishProgress(mBSC.Receive());
@@ -310,11 +313,11 @@ public class actByteStream extends BaseCommActivity
 		@Override
 		public void onPostExecute(Integer result)
 		{
-			if (CONNECT_LOST == result) //通信连接丢失
+			if (CONNECT_LOST == result) //connection is lost
 				mtvReceive.append(getString(R.string.msg_msg_bt_connect_lost));
 			else
-				mtvReceive.append(getString(R.string.msg_receive_data_stop));//提示接收终止
-			mibtnSend.setEnabled(false); //禁用发送按钮
+				mtvReceive.append(getString(R.string.msg_receive_data_stop));//Tip receive termination
+			mibtnSend.setEnabled(false); //Disable the Send button
 			refreshHoldTime(); //刷新数据统计状态条-运行时间
 		}
     }

@@ -37,8 +37,8 @@ public abstract class BTSerialComm
 	/**常量:写解锁*/
 	private static final byte UNLOCK_WRITE = 0x04;
 
-	/**接收缓存池大小，10k*/
-	private static final int iBUF_TOTAL = 1024 * 10;
+	/**接收缓存池大小，50k*/
+	private static final int iBUF_TOTAL = 1024 * 50;
 	/**接收缓存池*/
 	private final byte[] mbReceiveBufs = new byte[iBUF_TOTAL];
 	/**接收缓存池指针（指示缓冲池保存的数据量）*/
