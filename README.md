@@ -15,3 +15,6 @@ Bluetooth Spp tools pro 是 Android平台的蓝牙串口通信开发调试工具，是一个免费的开
 > * 公共的蓝牙设备搜索模块，可扫描周围的蓝牙设备（如果手机支持还能扫描到蓝牙低功耗设备，蓝牙4.0）
 > * 公共蓝牙配对与uuid service扫描界面以及蓝牙串行连接，建立连接后，可分别切换不同的通信模式进行操作
 > * 通信模式分为：1、字符流模式；2、键盘模式；3、命令行模式；（未来会加入传感器模式）
+-----------------------------------
+### 结构图
+![Alt structure](https://github.com/hzjerry/BluetoothSppPro/blob/master/readme/structure.png "structure")
