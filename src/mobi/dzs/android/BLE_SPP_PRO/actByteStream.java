@@ -279,7 +279,7 @@ public class actByteStream extends BaseCommActivity
 			while(!mbThreadStop)
 			{
 				if (!mBSC.isConnect())//检查连接是否丢失
-					return CONNECT_LOST; 
+					return (int)CONNECT_LOST; 
 				
 				if (mBSC.getReceiveBufLen() > 0)
 					this.publishProgress(mBSC.Receive());
@@ -290,10 +290,10 @@ public class actByteStream extends BaseCommActivity
 				}
 				catch (InterruptedException e)
 				{
-					return THREAD_END;
+					return (int)THREAD_END;
 				} 
 			}
-			return THREAD_END;
+			return (int)THREAD_END;
 		}
 		
 		/**

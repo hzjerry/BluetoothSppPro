@@ -35,11 +35,11 @@ public class actDiscovery extends Activity
 	/**CONST: quit system*/
 	public static final int MEMU_QUIT = 2;
 	/**CONST: device type bltetooth 2.1*/
-	public static final byte DEVICE_TYPE_BREDR = 0x01;
+	public static final int DEVICE_TYPE_BREDR = 0x01;
 	/**CONST: device type bltetooth 4.0 ble*/
-	public static final byte DEVICE_TYPE_BLE = 0x02;
+	public static final int DEVICE_TYPE_BLE = 0x02;
 	/**CONST: device type bltetooth double mode*/
-	public static final byte DEVICE_TYPE_DUMO = 0x03;
+	public static final int DEVICE_TYPE_DUMO = 0x03;
 	
 	public final static String EXTRA_DEVICE_TYPE = "android.bluetooth.device.extra.DEVICE_TYPE";
 	

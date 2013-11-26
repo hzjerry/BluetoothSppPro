@@ -414,9 +414,9 @@ public abstract class BTSerialComm
 		/**常量:缓冲区最大空间*/
 		static private final int BUFF_MAX_CONUT = 1024*5;
 		/**常量:连接丢失*/
-		static private final byte CONNECT_LOST = 0x01;
+		static private final int CONNECT_LOST = 0x01;
 		/**常量：接收线程正常结束*/
-		static private final byte THREAD_END = 0x02;
+		static private final int THREAD_END = 0x02;
 
 		/**
 		 * 线程启动初始化操作

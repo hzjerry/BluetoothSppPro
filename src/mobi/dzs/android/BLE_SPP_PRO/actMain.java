@@ -486,9 +486,9 @@ public class actMain extends Activity
     private class PairTask extends AsyncTask<String, String, Integer>
     {
 		/**常量:配对成功*/
-		static private final byte RET_BOND_OK = 0x00;
+		static private final int RET_BOND_OK = 0x00;
 		/**常量: 配对失败*/
-		static private final byte RET_BOND_FAIL = 0x01;
+		static private final int RET_BOND_FAIL = 0x01;
 		/**常量: 配对等待时间(10秒)*/
 		static private final int iTIMEOUT = 1000 * 10; 
 		/**
@@ -669,9 +669,9 @@ public class actMain extends Activity
     	/**进程等待提示框*/
     	private ProgressDialog mpd = null;
     	/**常量:连接建立失败*/
-    	private static final byte CONN_FAIL = 0x01;
+    	private static final int CONN_FAIL = 0x01;
     	/**常量:连接建立成功*/
-    	private static final byte CONN_SUCCESS = 0x02;
+    	private static final int CONN_SUCCESS = 0x02;
     	
 		/**
 		 * 线程启动初始化操作

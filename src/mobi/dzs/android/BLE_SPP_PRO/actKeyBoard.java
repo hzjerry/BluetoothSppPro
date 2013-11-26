@@ -906,9 +906,9 @@ public class actKeyBoard extends BaseCommActivity
     private class receiveTask extends AsyncTask<String, String, Integer>
     {
     	/**常量:连接丢失*/
-    	private final static byte CONNECT_LOST = 0x01;
+    	private final static int CONNECT_LOST = 0x01;
     	/**常量:线程任务结束*/
-    	private final static byte THREAD_END = 0x02;
+    	private final static int THREAD_END = 0x02;
 		/**
 		 * 线程启动初始化操作
 		 */

@@ -474,11 +474,11 @@ public class actCmdLine extends BaseCommActivity
 			while(!mbThreadStop)
 			{
 				if (!mBSC.isConnect())
-					return CONNECT_LOST; //检查连接是否丢失
+					return (int)CONNECT_LOST; //检查连接是否丢失
 				
 				this.publishProgress(mBSC.ReceiveStopFlg());
 			}
-			return THREAD_END;
+			return (int)THREAD_END;
 		}
 		
 		/**
