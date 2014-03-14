@@ -380,7 +380,7 @@ public abstract class BTSerialComm
 	 * 互斥锁操作：加锁
 	 * @param btType 锁定类型 LOCK_READ / LOCK_WRITE
 	 * */
-	private void doLock(byte btType)
+	private synchronized void doLock(byte btType)
 	{
 		if (LOCK_READ == btType)
 		{
@@ -399,7 +399,7 @@ public abstract class BTSerialComm
 	 * 互斥锁操作：解锁
 	 * @param btType 解锁类型 UNLOCK_READ / UNLOCK_WRITE
 	 * */
-	private void doUnlock(byte btType)
+	private synchronized void doUnlock(byte btType)
 	{
 		if (UNLOCK_READ == btType)
 			this.mbReadLock = false;
