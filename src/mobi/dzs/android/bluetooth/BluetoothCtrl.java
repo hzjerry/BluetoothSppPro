@@ -8,8 +8,7 @@ import android.util.Log;
 /**
  * 蓝牙的私有API接口调用工具类
  * */
-public class BluetoothCtrl
-{
+public class BluetoothCtrl{
 	/**常量:蓝牙配对绑定过滤监听器名称*/
 	static public final String PAIRING_REQUEST = "android.bluetooth.device.action.PAIRING_REQUEST";
     /** 
@@ -46,8 +45,7 @@ public class BluetoothCtrl
     	throws Exception
     {
     	Boolean returnValue = false;
-        try
-        {   
+        try{   
         	Class<? extends BluetoothDevice> btClass = btDevice.getClass();
             Method removeBondMethod = btClass.getDeclaredMethod("setPin", new Class[] { byte[].class });
 //        	byte[] ar = new byte[]{0x31,0x32,0x33,0x34};
@@ -56,21 +54,15 @@ public class BluetoothCtrl
 //            Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice, ar);
             returnValue = (Boolean) removeBondMethod.invoke(btDevice, new Object[] { str.getBytes() });  
             Log.d("returnValue", ">>setPin:" + returnValue.toString());  
-        }
-        catch (SecurityException e)
-        {  
+        }catch (SecurityException e){  
             // throw new RuntimeException(e.getMessage());
         	Log.e("returnValue", ">>setPin:" + e.getMessage());  
             e.printStackTrace();  
-        }
-        catch (IllegalArgumentException e)
-        {  
+        }catch (IllegalArgumentException e){  
             // throw new RuntimeException(e.getMessage());
         	Log.e("returnValue", ">>setPin:" + e.getMessage());
             e.printStackTrace();  
-        }
-        catch (Exception e)
-        {  
+        }catch (Exception e){  
         	Log.e("returnValue", ">>setPin:" + e.getMessage());  
             e.printStackTrace();  
         }  

@@ -21,3 +21,10 @@ local.properties
 /BluetoothSppPro.rar
 /download_code.txt
 /assets
+
+# bin
+/bin/jarlist.cache
+/bin/AndroidManifest.xml
+/bin/res
+/bin/classes
+/bin/dexedLibs

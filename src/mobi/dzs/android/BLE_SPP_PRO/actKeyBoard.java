@@ -13,6 +13,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -933,15 +934,7 @@ public class actKeyBoard extends BaseCommActivity
 				
 				if (mBSC.getReceiveBufLen() > 0)
 					this.publishProgress(mBSC.Receive());
-				
-				try
-				{
-					Thread.sleep(20);//接收等待延时，提高接收效率
-				}
-				catch (InterruptedException e)
-				{
-					return THREAD_END;
-				} 
+				SystemClock.sleep(10);//接收等待延时，提高接收效率
 			}
 			return THREAD_END;
 		}

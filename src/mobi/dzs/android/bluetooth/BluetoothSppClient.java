@@ -9,8 +9,7 @@ import mobi.dzs.android.util.CHexConver;
  * @version 1.0 2013-03-17
  * @author JerryLi (lijian@dzs.mobi)
  * */
-public final class BluetoothSppClient extends BTSerialComm
-{
+public final class BluetoothSppClient extends BTSerialComm{
 	/**常量:输入输出模式为16进制值*/
 	public final static byte IO_MODE_HEX = 0x01; 
 	/**常量:输入输出模式为字符串*/
@@ -29,8 +28,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * @param String MAC 蓝牙MAC地址
 	 * @return void
 	 * */
-	public BluetoothSppClient(String MAC)
-	{
+	public BluetoothSppClient(String MAC){
 		super(MAC); //执行父类的构造函数
 	}
 	
@@ -39,8 +37,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * @param bOutIO_Mode 输出io模式 IO_MODE_HEX / IO_MODE_STRING
 	 * @return void
 	 * */
-	public void setTxdMode(byte bOutputMode)
-	{
+	public void setTxdMode(byte bOutputMode){
 		this.mbtTxDMode = bOutputMode;
 	}
 	
@@ -48,8 +45,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * 获取发送时的字符串模式
 	 * @return byte 输出io模式 IO_MODE_HEX / IO_MODE_STRING
 	 * */
-	public byte getTxdMode()
-	{
+	public byte getTxdMode(){
 		return this.mbtTxDMode;
 	}
 	
@@ -57,8 +53,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * 设置接收时的字符串输出模式
 	 * @param bOutIO_Mode 输出io模式 IO_MODE_HEX / IO_MODE_STRING
 	 * */
-	public void setRxdMode(byte bOutputMode)
-	{
+	public void setRxdMode(byte bOutputMode){
 		this.mbtRxDMode = bOutputMode;
 	}
 	
@@ -68,25 +63,17 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * @param byte btData[] 需要发送的数据位
 	 * @return int >0 发送正常, 0未发送数据, -2:连接未建立; -3:连接丢失
 	 * */
-	public int Send(String sData)
-	{
-		if (IO_MODE_HEX == this.mbtTxDMode) //16进制字符串转换成byte值
-		{
+	public int Send(String sData){
+		if (IO_MODE_HEX == this.mbtTxDMode){ //16进制字符串转换成byte值
 			if (CHexConver.checkHexStr(sData))
 				return SendData(CHexConver.hexStr2Bytes(sData));
 			else
 				return 0; //无效的HEX值
-		}
-		else //将字符串直接变为char的byte送出
-		{
-			if (null != this.msCharsetName)
-			{
-				try
-				{	//尝试做字符集转换
+		}else{ //将字符串直接变为char的byte送出
+			if (null != this.msCharsetName){
+				try{	//尝试做字符集转换
 					return this.SendData(sData.getBytes(this.msCharsetName));
-				}
-				catch (UnsupportedEncodingException e)
-				{	//字符集转换失败时使用默认字符集
+				}catch (UnsupportedEncodingException e){	//字符集转换失败时使用默认字符集
 					return this.SendData(sData.getBytes());
 				}
 			}
@@ -101,12 +88,10 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * 接收设备数据
 	 * @return String null:未连接或连接中断 / String:数据
 	 * */
-	public String Receive()
-	{
+	public String Receive()	{
 		byte[] btTmp = this.ReceiveData();
 		
-		if (null != btTmp)
-		{
+		if (null != btTmp){
 			if (IO_MODE_HEX == this.mbtRxDMode) //16进制字符串转换成byte值
 				return (CHexConver.byte2HexStr(btTmp, btTmp.length)).concat(" ");
 			else
@@ -121,8 +106,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * @return void
 	 * @see 仅用于ReceiveStopFlg()函数
 	 * */
-	public void setReceiveStopFlg(String sFlg)
-	{
+	public void setReceiveStopFlg(String sFlg){
 		this.mbtEndFlg = sFlg.getBytes();
 	}
 	
@@ -132,8 +116,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 * @return void
 	 * @see 此设置仅对ReceiveStopFlg()与Send()函数有效
 	 * */
-	public void setCharset(String sCharset)
-	{
+	public void setCharset(String sCharset){
 		this.msCharsetName = sCharset;
 	}
 	
@@ -142,8 +125,7 @@ public final class BluetoothSppClient extends BTSerialComm
 	 *  备注：即在接收时遇到终止字符后，才会输出结果，并在输出结果中会剔除终止符
 	 *  @return null:未连接或连接中断/String:取到数据
 	 * */
-	public String ReceiveStopFlg()
-	{
+	public String ReceiveStopFlg(){
 		byte[] btTmp = null;
 		
 		if (null == this.mbtEndFlg)
@@ -152,22 +134,16 @@ public final class BluetoothSppClient extends BTSerialComm
 		btTmp = this.ReceiveData_StopFlg(this.mbtEndFlg);
 		if (null == btTmp)
 			return null; //无效的接收
-		else
-		{
+		else{
 			if (null == this.msCharsetName)
 				return new String(btTmp);
-			else
-			{
-				try
-				{	//尝试对取得的值做字符集转换
+			else{
+				try{	//尝试对取得的值做字符集转换
 					return new String(btTmp, this.msCharsetName);
-				}
-				catch (UnsupportedEncodingException e)
-				{	//转换失败时直接用UTF-8输出
+				}catch (UnsupportedEncodingException e){	//转换失败时直接用UTF-8输出
 					return new String(btTmp);
 				}
 			}
 		}
-
 	}
 }

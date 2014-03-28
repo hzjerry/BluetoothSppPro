@@ -14,8 +14,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
  * @version 1.0 (2012-07-30)
  * @see setVal()使用后必须用saveStorage()保存数据到存储区，否则设置值将丢失
  * */
-public class DynamicStorage
-{
+public class DynamicStorage{
 	private static final String msDELIMITER = "|_|"; 
 	/**系统容器*/
 	private Context mc = null;
@@ -26,20 +25,16 @@ public class DynamicStorage
 	private SharedPreferences mSP = null;
 	
 	/**构造函数*/
-	public DynamicStorage(Context C)
-	{
+	public DynamicStorage(Context C){
 		this.mc = C;
 		
 		PackageManager manager = mc.getPackageManager();
 		PackageInfo info;
-		try
-		{
+		try{
 			info = manager.getPackageInfo(mc.getPackageName(), 0);
 			this.msPkgName = info.packageName;
 			this.mSP = mc.getSharedPreferences(this.msPkgName, Context.MODE_PRIVATE);
-		}
-		catch (NameNotFoundException e)
-		{
+		}catch (NameNotFoundException e){
 			e.printStackTrace();
 			this.msPkgName = "";
 		}
@@ -49,8 +44,7 @@ public class DynamicStorage
 	 * 自动创建一个新的存储区
 	 * (如果不存在存储区对象的话)
 	 * */
-	private void newStorage()
-	{
+	private void newStorage(){
 		if (null == this.meSaveData)
 			this.meSaveData = 
 				mc.getSharedPreferences(this.msPkgName, Context.MODE_PRIVATE).edit(); //本地存储区
@@ -62,8 +56,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @return String 合并后的关键字索引名
 	 * */
-	private String getIdxKey(String sKey, String sSubKey)
-	{
+	private String getIdxKey(String sKey, String sSubKey){
 		return sKey + msDELIMITER + sSubKey;
 	}
 	
@@ -73,10 +66,8 @@ public class DynamicStorage
 	 * @return boolean false:失败，不存在值
 	 * @see setVal()后，需要使用这个函数保存值
 	 * */
-	public boolean saveStorage()
-	{
-		if (null != this.meSaveData)
-		{
+	public boolean saveStorage(){
+		if (null != this.meSaveData){
 			this.meSaveData.commit();//提交数据保存
 			this.meSaveData = null; //保存后释放存储区
 			return true;
@@ -91,8 +82,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @param sVal 保存的字符串值
 	 * */
-	public void setVal(String sKey, String sSubKey, String sVal)
-	{
+	public void setVal(String sKey, String sSubKey, String sVal){
 		this.newStorage();
 		this.meSaveData.putString(this.getIdxKey(sKey, sSubKey), sVal);
 	}
@@ -103,8 +93,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @param iVal 保存的整形值
 	 * */
-	public void setVal(String sKey, String sSubKey, int iVal)
-	{
+	public void setVal(String sKey, String sSubKey, int iVal){
 		this.newStorage();
 		this.meSaveData.putInt(this.getIdxKey(sKey, sSubKey), iVal);
 	}
@@ -115,8 +104,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @param fVal 保存的浮点值
 	 * */
-	public void setVal(String sKey, String sSubKey, float fVal)
-	{
+	public void setVal(String sKey, String sSubKey, float fVal){
 		this.newStorage();
 		this.meSaveData.putFloat(this.getIdxKey(sKey, sSubKey), fVal);
 	}
@@ -127,8 +115,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @param lVal 保存的长整形
 	 * */
-	public void setVal(String sKey, String sSubKey, long lVal)
-	{
+	public void setVal(String sKey, String sSubKey, long lVal){
 		this.newStorage();
 		this.meSaveData.putLong(this.getIdxKey(sKey, sSubKey), lVal);
 	}
@@ -139,8 +126,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @param bVal 保存的布尔值
 	 * */
-	public void setVal(String sKey, String sSubKey, boolean bVal)
-	{
+	public void setVal(String sKey, String sSubKey, boolean bVal){
 		this.newStorage();
 		this.meSaveData.putBoolean(this.getIdxKey(sKey, sSubKey), bVal);
 	}
@@ -149,10 +135,9 @@ public class DynamicStorage
 	 * 获取关键字保存值
 	 * @param sKey 主关键字
 	 * @param sSubKey 子关键字
-	 * @return String  /不存在时返回  ""
+	 * @return String 不存在时返回  ""
 	 * */
-	public String getStringVal(String sKey, String sSubKey)
-	{
+	public String getStringVal(String sKey, String sSubKey){
 		return this.mSP.getString(this.getIdxKey(sKey, sSubKey), "");
 	}
 	
@@ -162,8 +147,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @return float /不存在时返回 0.0f
 	 * */
-	public float getFloatVal(String sKey, String sSubKey)
-	{
+	public float getFloatVal(String sKey, String sSubKey){
 		return this.mSP.getFloat(this.getIdxKey(sKey, sSubKey), 0.0f);
 	}
 	
@@ -173,8 +157,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @return int /不存在时返回0
 	 * */
-	public int getIntVal(String sKey, String sSubKey)
-	{
+	public int getIntVal(String sKey, String sSubKey){
 		return this.mSP.getInt(this.getIdxKey(sKey, sSubKey), 0);
 	}
 	
@@ -184,8 +167,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @return int /不存在时返回0
 	 * */
-	public long getLongVal(String sKey, String sSubKey)
-	{
+	public long getLongVal(String sKey, String sSubKey){
 		return this.mSP.getLong(this.getIdxKey(sKey, sSubKey), 0);
 	}
 	
@@ -195,8 +177,7 @@ public class DynamicStorage
 	 * @param sSubKey 子关键字
 	 * @return boolean /不存在时返回 false
 	 * */
-	public boolean getBooleanVal(String sKey, String sSubKey)
-	{
+	public boolean getBooleanVal(String sKey, String sSubKey){
 		return this.mSP.getBoolean(this.getIdxKey(sKey, sSubKey), false);
 	}
 }

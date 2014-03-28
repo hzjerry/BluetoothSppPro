@@ -63,8 +63,7 @@ public class BaseCommActivity extends BaseActivity
 	
 	/**未设限制的AsyncTask线程池(重要)*/
 	protected static ExecutorService FULL_TASK_EXECUTOR;
-	static
-	{
+	static{
 		FULL_TASK_EXECUTOR = (ExecutorService) Executors.newCachedThreadPool();
 	};
 	
@@ -72,14 +71,12 @@ public class BaseCommActivity extends BaseActivity
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);
 		this.mBSC = ((globalPool)this.getApplicationContext()).mBSC;
 		this.mDS =  ((globalPool)this.getApplicationContext()).mDS;
 		
-		if (null == this.mBSC && !this.mBSC.isConnect())
-		{	//当进入时，发现连接已丢失，则直接返回主界面
+		if (null == this.mBSC && !this.mBSC.isConnect()){	//当进入时，发现连接已丢失，则直接返回主界面
         	this.setResult(Activity.RESULT_CANCELED); //返回到主界面
         	this.finish();
         	return;
@@ -95,8 +92,7 @@ public class BaseCommActivity extends BaseActivity
 	        android:layout_height="wrap_content"<br/>
 	        layout="@layout/bar_data_count" /&gt;
 	 * */
-	protected void usedDataCount()
-	{	//获取数据统计条
+	protected void usedDataCount(){	//获取数据统计条
 		this.mtvTxdCount = (TextView)this.findViewById(R.id.tv_txd_count);
 		this.mtvRxdCount = (TextView)this.findViewById(R.id.tv_rxd_count);
 		this.mtvHoleRun = (TextView)this.findViewById(R.id.tv_connect_hold_time);
@@ -110,8 +106,7 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * @see 必须使用 usedDataCount()以后才能使用这个函数
      * */
-	protected void refreshTxdCount()
-    {
+	protected void refreshTxdCount(){
 		long lTmp = 0;
 		if (null != this.mtvTxdCount)
 		{
@@ -127,8 +122,7 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * @see 必须使用 usedDataCount()以后才能使用这个函数
      * */
-	protected void refreshRxdCount()
-    {
+	protected void refreshRxdCount(){
 		long lTmp = 0;
 		if (null != this.mtvRxdCount)
 		{
@@ -145,8 +139,7 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * @see 必须使用 usedDataCount()以后才能使用这个函数
      * */
-	protected void refreshHoldTime()
-    {
+	protected void refreshHoldTime(){
 		if (null != this.mtvHoleRun)
 		{
 			long lTmp = this.mBSC.getConnectHoldTime();
@@ -158,8 +151,7 @@ public class BaseCommActivity extends BaseActivity
 	 * 初始化输入输出模式
 	 * @return void
 	 * */
-	protected void initIO_Mode()
-	{
+	protected void initIO_Mode(){
 		this.mbtInputMode = (byte)this.mDS.getIntVal(KEY_IO_MODE, "input_mode");
 		if (this.mbtInputMode == 0)
 			this.mbtInputMode = BluetoothSppClient.IO_MODE_STRING;
@@ -176,8 +168,7 @@ public class BaseCommActivity extends BaseActivity
      * 字符显示模式 IO_MODE_HEX / IO_MODE_STRING
      * @return void
      * */
-	protected void setIOModeDialog()
-    {
+	protected void setIOModeDialog(){
     	final RadioButton rbInChar, rbInHex;
     	final RadioButton rbOutChar, rbOutHex;
 
@@ -202,11 +193,9 @@ public class BaseCommActivity extends BaseActivity
     		rbOutHex.setChecked(true);
 
     	builder.setView(view);//绑定布局
-    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener()
-    	{
+    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener(){
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which){
             	//设置输入输出的模式
             	mbtInputMode = (rbInChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
             	mbtOutputMode = (rbOutChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
@@ -226,12 +215,10 @@ public class BaseCommActivity extends BaseActivity
      * @param String sClass 所属的类一般为this.getLocalClassName()
      * @return void
      * */
-    protected void saveAutoComplateCmdHistory(String sClass)
-    {
+    protected void saveAutoComplateCmdHistory(String sClass){
     	if(malCmdHistory.isEmpty())
     		this.mDS.setVal(KEY_HISTORY, sClass, ""); //清除历史日志
-    	else
-    	{	//保存输入提示历史
+    	else{	//保存输入提示历史
     		StringBuilder sbBuf = new StringBuilder();
     		String sTmp = null;
     		for(int i=0; i<malCmdHistory.size(); i++)
@@ -248,16 +235,13 @@ public class BaseCommActivity extends BaseActivity
      * @param AutoCompleteTextView v 自动完成控件的引用
      * @return void
      * */
-    protected void loadAutoComplateCmdHistory(String sClass, AutoCompleteTextView v)
-    {
+    protected void loadAutoComplateCmdHistory(String sClass, AutoCompleteTextView v){
     	String sTmp = this.mDS.getStringVal(KEY_HISTORY, sClass);
-    	if(!sTmp.equals(""))
-    	{	//保存输入提示历史
+    	if(!sTmp.equals("")){	//保存输入提示历史
     		String[] sT = sTmp.split(HISTORY_SPLIT);
     		for (int i=0;i<sT.length; i++)
     			this.malCmdHistory.add(sT[i]);
-			v.setAdapter
-			(
+			v.setAdapter(
 				new ArrayAdapter<String>(this,  
                 	android.R.layout.simple_dropdown_item_1line,sT)
 			);
@@ -272,14 +256,11 @@ public class BaseCommActivity extends BaseActivity
      * @see 1、必须在onDestroy()中使用saveAutoComplateCmdHistory()保存自动完成值，否则新增的内容会在下次启动时丢失；<br/>
      * 2、在启动时，用loadAutoComplateCmdHistory()载入之前保存的历史值；
      * */
-    protected void addAutoComplateVal(String sData, AutoCompleteTextView v)
-    {
+    protected void addAutoComplateVal(String sData, AutoCompleteTextView v){
 		//输入提示的处理
-		if (this.malCmdHistory.indexOf(sData) == -1)
-		{	//不存在历史列表中，加入自动提示字段
+		if (this.malCmdHistory.indexOf(sData) == -1){	//不存在历史列表中，加入自动提示字段
 			this.malCmdHistory.add(sData);
-			v.setAdapter
-			(
+			v.setAdapter(
 				new ArrayAdapter<String>(this,  
                 	android.R.layout.simple_dropdown_item_1line,  
                 	malCmdHistory.toArray(new String[malCmdHistory.size()]))
@@ -292,11 +273,9 @@ public class BaseCommActivity extends BaseActivity
      * @param AutoCompleteTextView v 自动完成控件的引用
      * @return void
      * */
-    protected void clearAutoComplate(AutoCompleteTextView v)
-    {
+    protected void clearAutoComplate(AutoCompleteTextView v){
     	this.malCmdHistory.clear();
-		v.setAdapter
-		(
+		v.setAdapter(
 			new ArrayAdapter<String>(this,  
             	android.R.layout.simple_dropdown_item_1line)
 		);

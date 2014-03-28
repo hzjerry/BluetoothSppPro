@@ -14,30 +14,25 @@ import java.io.FileReader;
  * @version 1.0
  * @date 2010-06-25
  */
-public class LocalIOTools
-{
+public class LocalIOTools{
 	/**
 	 * 通过本地文件载入字符串内容
 	 * 
 	 * @param String path 文件路徑
 	 * @return String 读取成功后輸出文件内容
 	 */
-	public static String LoadFromFile(String path)
-	{
+	public static String LoadFromFile(String path){
 		StringBuffer sbOutBuf = new StringBuffer();
 		String read;
 		BufferedReader bufread;
-		try
-		{
+		try	{
 			File fhd = new File(path); // 获取文件句柄
 			bufread = new BufferedReader(new FileReader(fhd)); // 打开缓存
 			/* 循环方式逐行读入 */
 			while ((read = bufread.readLine()) != null)
 				sbOutBuf.append(read);
 			bufread.close();
-		}
-		catch (Exception d)
-		{
+		}catch (Exception d){
 //			System.out.println(d.getMessage());
 			return null;
 		}
@@ -55,10 +50,8 @@ public class LocalIOTools
 	 * @return boolean
 	 * @see android.permission.WRITE_EXTERNAL_STORAGE
 	 */
-	public static boolean appendByte2File(String sPath, String sFile, byte[] bData)
-	{
-		try
-		{
+	public static boolean appendByte2File(String sPath, String sFile, byte[] bData){
+		try	{
 			/*检查目录是否存在*/
 			File fhd = new File(sPath); // 获取文件句柄
 			if (!fhd.exists())
@@ -76,13 +69,10 @@ public class LocalIOTools
 			fso.write(bData);
 			fso.close();
 			return true;
-		}
-		catch (Exception d)
-		{
+		}catch (Exception d){
 //			System.out.println(d.getMessage());
 			return false;
 		}
-		
 	}/*Output:
 		if (LocalIOTools.appendByte2File("F:/temp", "javatest.txt", "this is test.\r\nbuf write".getBytes()))
 			System.out.println("write ok.");
@@ -101,10 +91,8 @@ public class LocalIOTools
 	 * @return boolean
 	 * @see android.permission.WRITE_EXTERNAL_STORAGE
 	 */
-	public static boolean coverByte2File(String sPath, String sFile, byte[] bData)
-	{
-		try
-		{
+	public static boolean coverByte2File(String sPath, String sFile, byte[] bData){
+		try	{
 			/*检查目录是否存在*/
 			File fhd = new File(sPath); // 获取文件句柄
 			if (!fhd.exists())
@@ -121,13 +109,10 @@ public class LocalIOTools
 			fso.write(bData);
 			fso.close();
 			return true;
-		}
-		catch (Exception d)
-		{
+		}catch (Exception d){
 			System.out.println(d.getMessage());
 			return false;
-		}
-		
+		}		
 	}/*Output:
 		if (LocalIOTools.appendByte2File("F:/temp", "javatest.txt", "this is test.\r\nbuf write".getBytes()))
 			System.out.println("write ok.");

@@ -24,8 +24,7 @@ import android.os.SystemClock;
  *  &lt;uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/&gt;<br />
  *  Android 支持版本 LEVEL 4以上，并且LEVEL 17支持bluetooth 4的ble设备
  * */
-public abstract class BTSerialComm
-{
+public abstract class BTSerialComm{
 	/**常量:SPP的Service UUID*/
 	public final static String UUID_SPP = "00001101-0000-1000-8000-00805F9B34FB";
 	/**常量:读锁*/
@@ -81,8 +80,7 @@ public abstract class BTSerialComm
 	private static ExecutorService FULL_TASK_EXECUTOR;
 	/**常量:当前的Adnroid SDK 版本号*/
 	private static final int SDK_VER;
-	static
-	{
+	static{
 		FULL_TASK_EXECUTOR = (ExecutorService) Executors.newCachedThreadPool();
 		SDK_VER = Build.VERSION.SDK_INT;
 	};
@@ -91,8 +89,7 @@ public abstract class BTSerialComm
 	 * 构造函数
 	 * @param String sMAC 需要连接的蓝牙设备MAC地址码
 	 * */
-	public BTSerialComm(String sMAC)
-	{
+	public BTSerialComm(String sMAC){
 		this.msMAC = sMAC;
 	}
 
@@ -100,8 +97,7 @@ public abstract class BTSerialComm
 	 * 获取连接保持的时间
 	 * @return 单位 秒
 	 * */
-	public long getConnectHoldTime()
-	{
+	public long getConnectHoldTime(){
 		if (0 == this.mlConnEnableTime)
 			return 0;
 		else if (0 == this.mlConnDisableTime)
@@ -114,12 +110,9 @@ public abstract class BTSerialComm
 	 * 断开蓝牙设备的连接
 	 * @return void
 	 * */
-	public void closeConn()
-	{
-		if ( this.mbConectOk )
-		{
-			try
-			{
+	public void closeConn(){
+		if ( this.mbConectOk ){
+			try{
 				if (null != this.misIn)
 					this.misIn.close();
 				if (null != this.mosOut)
@@ -127,17 +120,13 @@ public abstract class BTSerialComm
 				if (null != this.mbsSocket)
 					this.mbsSocket.close();
 				this.mbConectOk = false;//标记连接已被关闭
-			}
-			catch (IOException e)
-			{
+			}catch (IOException e){
 				//任何一部分报错，都将强制关闭socket连接
 				this.misIn = null;
 				this.mosOut = null;
 				this.mbsSocket = null;
 				this.mbConectOk = false;//标记连接已被关闭
-			}
-			finally
-			{	//保存连接中断时间
+			}finally{	//保存连接中断时间
 				this.mlConnDisableTime = System.currentTimeMillis();
 			}
 		}
@@ -148,8 +137,7 @@ public abstract class BTSerialComm
 	 * <strong>备注</strong>：这个函数最好放到线程中去调用，因为调用时会阻塞系统
 	 * @return boolean false:连接创建失败 / true:连接创建成功
 	 * */
-	final public boolean createConn()
-	{
+	final public boolean createConn(){
 		if (! mBT.isEnabled())
 			return false;
 
@@ -160,8 +148,7 @@ public abstract class BTSerialComm
 		/*开始连接蓝牙设备*/
     	final BluetoothDevice device = BluetoothAdapter.getDefaultAdapter().getRemoteDevice(this.msMAC);
     	final UUID uuidSPP = UUID.fromString(BluetoothSppClient.UUID_SPP);
-		try
-		{
+		try{
 			//得到设备连接后，立即创建SPP连接
 			if (SDK_VER >= 10)//2.3.3以上的设备需要用这个方式创建通信连接
 				this.mbsSocket = device.createInsecureRfcommSocketToServiceRecord(uuidSPP);
@@ -173,14 +160,10 @@ public abstract class BTSerialComm
 			this.misIn = this.mbsSocket.getInputStream(); //获取流输入对象
 			this.mbConectOk = true; //设备连接成功
 			this.mlConnEnableTime = System.currentTimeMillis(); //保存连接建立时间
-		}
-		catch (IOException e)
-		{
+		}catch (IOException e){
 			this.closeConn();//断开连接
 			return false;
-		}
-		finally
-		{
+		}finally{
 			this.mlConnDisableTime = 0; //连接终止时间初始化
 		}
 		return true;
@@ -190,8 +173,7 @@ public abstract class BTSerialComm
 	 * 设备的通信是否已建立
 	 * @return boolean true:通信已建立 / false:通信丢失
 	 * */
-	public boolean isConnect()
-	{
+	public boolean isConnect()	{
 		return this.mbConectOk;
 	}
 
@@ -199,8 +181,7 @@ public abstract class BTSerialComm
 	 * 接收到的字节数
 	 * @return long
 	 * */
-	public long getRxd()
-	{
+	public long getRxd(){
 		return this.mlRxd;
 	}
 
@@ -208,8 +189,7 @@ public abstract class BTSerialComm
 	 * 发送的字节数
 	 * @return long
 	 * */
-	public long getTxd()
-	{
+	public long getTxd(){
 		return this.mlTxd;
 	}
 
@@ -217,8 +197,7 @@ public abstract class BTSerialComm
 	 * 接收缓冲池的数据量
 	 * @return int
 	 * */
-	public int getReceiveBufLen()
-	{
+	public int getReceiveBufLen(){
 		return this.miBufDataSite;
 	}
 
@@ -227,18 +206,13 @@ public abstract class BTSerialComm
 	 * @param byte bD[] 需要发送的数据位
 	 * @return int >=0 发送正常, -2:连接未建立; -3:连接丢失
 	 * */
-	protected int SendData(byte[] btData)
-	{
-		if (this.mbConectOk)
-		{
-			try
-			{
+	protected int SendData(byte[] btData){
+		if (this.mbConectOk){
+			try{
 				mosOut.write(btData);//发送字符串值
 				this.mlTxd += btData.length;
 				return btData.length;
-			}
-			catch (IOException e)
-			{
+			}catch (IOException e){
 				//到这儿表示蓝牙连接已经丢失，关闭socket
 				this.closeConn();
 				return -3;
@@ -254,13 +228,10 @@ public abstract class BTSerialComm
 	 *
 	 * @return null:未连接或连接中断/byte[]:取到的新数据
 	 * */
-	final protected byte[] ReceiveData()
-	{
+	final protected byte[] ReceiveData(){
 		byte[] btBufs = null;
-		if (mbConectOk)
-		{
-			if (!this.mbReceiveThread)
-			{
+		if (mbConectOk){
+			if (!this.mbReceiveThread){
 				if(SDK_VER >= 11)
 					//LEVEL 11时的特殊处理
 					new ReceiveThread().executeOnExecutor(FULL_TASK_EXECUTOR);
@@ -271,8 +242,7 @@ public abstract class BTSerialComm
 				return null; //首次启动线程直接返回空字符串
 			}
 
-			if (this.miBufDataSite > 0)
-			{
+			if (this.miBufDataSite > 0){
 				this.doLock(LOCK_READ);//加锁，读取处理
 				btBufs = new byte[this.miBufDataSite];
 				for(int i=0; i<this.miBufDataSite; i++)
@@ -295,8 +265,7 @@ public abstract class BTSerialComm
 	 * @param dest 目标数据
 	 * @return boolean
 	 * */
-	static private boolean CompByte(byte[] src, byte[] dest)
-	{
+	 private static boolean CompByte(byte[] src, byte[] dest){
 		if (src.length != dest.length)
 			return false;
 
@@ -314,41 +283,36 @@ public abstract class BTSerialComm
 	 * @param btStopFlg 结束符 (例如: '\n')
 	 * @return null:未连接或连接中断/byte[]:取到数据
 	 * */
-	final protected byte[] ReceiveData_StopFlg(byte[] btStopFlg)
-	{
+	final protected byte[] ReceiveData_StopFlg(byte[] btStopFlg){
 		int iStopCharLen = btStopFlg.length; //终止字符的长度
 		byte[] btCmp = new byte[iStopCharLen];
 		byte[] btBufs = null; //临时输出缓存
 
-		if (mbConectOk)
-		{
-			if (!this.mbReceiveThread)
-			{
+		if (mbConectOk){
+			if (!this.mbReceiveThread){
 				if(SDK_VER >= 11)
 					//LEVEL 11时的特殊处理
 					new ReceiveThread().executeOnExecutor(FULL_TASK_EXECUTOR);
 				else
 					//启动接收线程
 					new ReceiveThread().execute("");
-				
 				SystemClock.sleep(50);//延迟，给线程启动的时间
 			}
 
 			while((this.miBufDataSite - iStopCharLen) <= 0)
-				SystemClock.sleep(100);//死循环，等待数据回复
+				SystemClock.sleep(50);//死循环，等待数据回复
 
 			//当缓冲池收到数据后，开始等待接收数据段
 			this.mbKillReceiveData_StopFlg = false; //可用killReceiveData_StopFlg()来终止阻塞状态
-			while(this.mbConectOk && !this.mbKillReceiveData_StopFlg)
-			{
+			while(this.mbConectOk && !this.mbKillReceiveData_StopFlg){
 				this.doLock(LOCK_READ);//加锁，读取处理
 				/*复制末尾待检查终止符*/
 				for(int i=0; i<iStopCharLen; i++)
 					btCmp[i] = this.mbReceiveBufs[this.miBufDataSite - iStopCharLen + i];
 				this.doUnlock(UNLOCK_READ);//解锁，读取处理完成
 				
-				if (CompByte(btCmp,btStopFlg)) //检查是否为终止符
-				{	//取出数据时，去掉结尾的终止符
+				if (CompByte(btCmp,btStopFlg)){ //检查是否为终止符
+					//取出数据时，去掉结尾的终止符
 					this.doLock(LOCK_READ);//加锁，读取处理
 					btBufs = new byte[this.miBufDataSite-iStopCharLen]; //分配存储空间
 					for(int i=0, iLen=this.miBufDataSite-iStopCharLen; i<iLen; i++)
@@ -358,7 +322,7 @@ public abstract class BTSerialComm
 					return btBufs;
 				}
 				else
-					SystemClock.sleep(50);//死循环，等待数据回复
+					SystemClock.sleep(10);//死循环，等待数据回复
 			}
 			return null;
 		}
@@ -371,8 +335,7 @@ public abstract class BTSerialComm
 	 * @return void
 	 * @see 必须在ReceiveData_StopFlg()执行后，才有使用价值
 	 * */
-	public void killReceiveData_StopFlg()
-	{
+	public void killReceiveData_StopFlg(){
 		this.mbKillReceiveData_StopFlg = true;
 	}
 
@@ -380,16 +343,12 @@ public abstract class BTSerialComm
 	 * 互斥锁操作：加锁
 	 * @param btType 锁定类型 LOCK_READ / LOCK_WRITE
 	 * */
-	private synchronized void doLock(byte btType)
-	{
-		if (LOCK_READ == btType)
-		{
+	private synchronized void doLock(byte btType){
+		if (LOCK_READ == btType){
 			while(this.mbWriteLock)
 				SystemClock.sleep(2);//延迟后再检查;
 			this.mbReadLock = true;
-		}
-		else if (LOCK_WRITE == btType)
-		{
+		}else if (LOCK_WRITE == btType){
 			while(this.mbReadLock)
 				SystemClock.sleep(2);//延迟后再检查;
 			this.mbWriteLock = true;
@@ -399,8 +358,7 @@ public abstract class BTSerialComm
 	 * 互斥锁操作：解锁
 	 * @param btType 解锁类型 UNLOCK_READ / UNLOCK_WRITE
 	 * */
-	private synchronized void doUnlock(byte btType)
-	{
+	private synchronized void doUnlock(byte btType){
 		if (UNLOCK_READ == btType)
 			this.mbReadLock = false;
 		else if (UNLOCK_WRITE == btType)
@@ -409,8 +367,7 @@ public abstract class BTSerialComm
 
 	//----------------
 	/*多线程处理*/
-	private class ReceiveThread extends AsyncTask<String, String, Integer>
-	{
+	private class ReceiveThread extends AsyncTask<String, String, Integer>{
 		/**常量:缓冲区最大空间*/
 		static private final int BUFF_MAX_CONUT = 1024*5;
 		/**常量:连接丢失*/
@@ -422,28 +379,22 @@ public abstract class BTSerialComm
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 			mbReceiveThread = true;//标记启动接收线程
 			miBufDataSite = 0; //缓冲池指针归0
 		}
 
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			int iReadCnt = 0; //本次读取的字节数
 			byte[] btButTmp = new byte[BUFF_MAX_CONUT]; //临时存储区
 
 
 			/*只要连接建立完成就开始进入读取等待处理*/
-			while(mbConectOk)
-			{
-				try
-				{
+			while(mbConectOk){
+				try{
 					iReadCnt = misIn.read(btButTmp); //没有数据，将一直锁死在这个位置等待
-				}
-				catch (IOException e)
-				{
+				}catch (IOException e){
 					return CONNECT_LOST;
 				}
 
@@ -466,24 +417,16 @@ public abstract class BTSerialComm
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			mbReceiveThread = false;//标记接收线程结束
-
-			if (CONNECT_LOST == result)
-			{
+			if (CONNECT_LOST == result){
 				//判断是否为串口连接失败
 				closeConn();
-			}
-			else
-			{	//正常结束，关闭接收流
-				try
-				{
+			}else{	//正常结束，关闭接收流
+				try{
 					misIn.close();
 					misIn = null;
-				}
-				catch (IOException e)
-				{
+				}catch (IOException e){
 					misIn = null;
 				}
 			}

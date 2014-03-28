@@ -14,8 +14,7 @@ public class globalPool extends Application
 	 * 覆盖构造
 	 * */
 	@Override
-	public void onCreate()
-	{
+	public void onCreate(){
 		this.mDS = new DynamicStorage(this);
 	}
 	
@@ -24,15 +23,13 @@ public class globalPool extends Application
 	 * @param String sMac 蓝牙硬件地址
 	 * @return boolean
 	 * */
-	public boolean createConn(String sMac)
-	{
+	public boolean createConn(String sMac){
 		if (null == this.mBSC)
 		{
 			this.mBSC = new BluetoothSppClient(sMac);
 			if (this.mBSC.createConn())
 				return true;
-			else
-			{
+			else{
 				this.mBSC = null;
 				return false;
 			}
@@ -45,10 +42,8 @@ public class globalPool extends Application
 	 * 关闭并释放连接
 	 * @return void
 	 * */
-	public void closeConn()
-	{
-		if (null != this.mBSC)
-		{
+	public void closeConn(){
+		if (null != this.mBSC){
 			this.mBSC.closeConn();
 			this.mBSC = null;
 		}

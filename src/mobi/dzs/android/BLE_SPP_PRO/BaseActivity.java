@@ -20,8 +20,7 @@ public class BaseActivity extends Activity
 	 * 激活Action Bar的回退按钮
 	 * @return void
 	 * */
-	protected void enabledBack()
-	{
+	protected void enabledBack(){
 		/*设置程序可以点击图标返回主界面*/
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -32,8 +31,7 @@ public class BaseActivity extends Activity
 	 * @param String sData 待保存的数据
 	 * @return void
 	 * */
-	protected void save2SD(String sData)
-	{
+	protected void save2SD(String sData){
 		String sRoot = null;
 		String sFileName = null;
 		String sPath = null;
@@ -47,13 +45,10 @@ public class BaseActivity extends Activity
 		sFileName = (new SimpleDateFormat("MMddHHmmss", Locale.getDefault())).format(new Date()) + ".txt";
 		//生成最终的保存路径
 		sPath = sRoot.concat("/").concat(this.getString(R.string.app_name));
-		if (LocalIOTools.coverByte2File(sPath, sFileName, sData.getBytes()))
-		{
+		if (LocalIOTools.coverByte2File(sPath, sFileName, sData.getBytes())){
 			String sMsg = ("save to:").concat(sPath).concat("/").concat(sFileName);
 			Toast.makeText(this, sMsg, Toast.LENGTH_LONG).show();//提示 文件保存成功
-		}
-		else
-		{
+		}else{
 			Toast.makeText(this, //提示 文件保存失败
 			   getString(R.string.msg_save_file_fail),
 			   Toast.LENGTH_SHORT).show();
@@ -65,24 +60,19 @@ public class BaseActivity extends Activity
      * @param int iRawID 资源文件ID
      * @return String / null
      */
-    public String getStringFormRawFile(int iRawID)
-    {
+    public String getStringFormRawFile(int iRawID){
     	InputStream is = this.getResources().openRawResource(iRawID);
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();
     	int i;
-		try
-		{
+		try{
 			i = is.read();
-	    	while(i != -1)
-	    	{
+	    	while(i != -1){
 	    		baos.write(i);
 	    		i = is.read();
 	    	}
 	    	is.close();
 	    	return baos.toString().trim();
-		}
-		catch (IOException e)
-		{
+		}catch (IOException e){
 			return null;
 		}
     }

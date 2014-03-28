@@ -6,8 +6,7 @@ import android.view.View;
  * @author JerryLi
  * @see 用于 class RepeatingButton，在使用时，需要在运行类中，实例化接口的所有函数
  * */
-public interface ButtonPassListener
-{
+public interface ButtonPassListener{
 	/**长按按钮事件
 	 * @param View v 按钮对象
 	 * @param long duration 延迟毫秒数
