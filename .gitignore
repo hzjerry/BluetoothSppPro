@@ -23,8 +23,4 @@ local.properties
 /assets
 
 # bin
-/bin/jarlist.cache
-/bin/AndroidManifest.xml
-/bin/res
-/bin/classes
-/bin/dexedLibs
+/bin
