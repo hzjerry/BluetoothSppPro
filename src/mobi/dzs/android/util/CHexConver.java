@@ -6,7 +6,7 @@ import java.util.Locale;
  * 16进制值与String/Byte之间的转换
  * @author JerryLi
  * @email lijian@dzs.mobi
- * @data 2014-03-28
+ * @data 2011-10-16
  * */
 public class CHexConver
 {
@@ -41,8 +41,8 @@ public class CHexConver
         byte[] bs = str.getBytes();  
         
         for (int i = 0; i < bs.length; i++){  
-            sb.append(mChars[bs[i] >> 4]);  
-            sb.append(mChars[bs[i] & 0x0f]);
+            sb.append(mChars[bs[i] & 0xFF >> 4]);  
+            sb.append(mChars[bs[i] & 0x0F]);
             sb.append(' ');
         }  
         return sb.toString().trim();  
@@ -76,13 +76,9 @@ public class CHexConver
 	public static String byte2HexStr(byte[] b, int iLen){
         StringBuilder sb = new StringBuilder("");
         for (int n=0; n<iLen; n++){
-            if (b[n] <= 0x0F){
-            	sb.append("0");
-            	sb.append(mChars[b[n]]);
-            }
-            else
-            	sb.append(Integer.toHexString(b[n]));
-            sb.append(" ");
+        	sb.append(mChars[(b[n] & 0xFF) >> 4]);
+        	sb.append(mChars[b[n] & 0x0F]);
+            sb.append(' ');
         }
         return sb.toString().trim().toUpperCase(Locale.US);
     }
