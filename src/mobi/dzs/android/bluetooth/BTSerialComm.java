@@ -27,15 +27,6 @@ import android.os.SystemClock;
 public abstract class BTSerialComm{
 	/**常量:SPP的Service UUID*/
 	public final static String UUID_SPP = "00001101-0000-1000-8000-00805F9B34FB";
-	/**常量:读锁*/
-	private static final byte LOCK_READ = 0x01;
-	/**常量:读解锁*/
-	private static final byte UNLOCK_READ = 0x02;
-	/**常量:写锁*/
-	private static final byte LOCK_WRITE = 0x03;
-	/**常量:写解锁*/
-	private static final byte UNLOCK_WRITE = 0x04;
-
 	/**接收缓存池大小，50k*/
 	private static final int iBUF_TOTAL = 1024 * 50;
 	/**接收缓存池*/
@@ -68,10 +59,8 @@ public abstract class BTSerialComm{
 	/**接收线程状态，默认不启动接收线程，只有当调用接收函数后，才启动接收线程*/
 	private boolean mbReceiveThread = false;
 
-	/**进程同步变量，读取锁(true:表示有一个进程正在读取 不可写入操作)*/
-	private boolean mbReadLock = false;
-	/**进程同步变量，写入锁(true:表示有一个进程正在写入 不可读取操作)*/
-	private boolean mbWriteLock = false;
+	/**公共接收缓冲区资源信号量（通过PV操作来保持同步）*/
+	private final CResourcePV mresReceiveBuf = new CResourcePV(1);
 	
 	/**操作开关，强制结束本次接收等待*/
 	private boolean mbKillReceiveData_StopFlg = false;
@@ -198,7 +187,11 @@ public abstract class BTSerialComm{
 	 * @return int
 	 * */
 	public int getReceiveBufLen(){
-		return this.miBufDataSite;
+		int iBufSize = 0;
+		this.P(this.mresReceiveBuf);//夺取缓存访问权限
+		iBufSize = this.miBufDataSite;
+		this.V(this.mresReceiveBuf);//归还缓存访问权限
+		return iBufSize;
 	}
 
 	/**
@@ -242,21 +235,16 @@ public abstract class BTSerialComm{
 				return null; //首次启动线程直接返回空字符串
 			}
 
+			this.P(this.mresReceiveBuf);//夺取缓存访问权限
 			if (this.miBufDataSite > 0){
-				this.doLock(LOCK_READ);//加锁，读取处理
 				btBufs = new byte[this.miBufDataSite];
 				for(int i=0; i<this.miBufDataSite; i++)
 					btBufs[i] = this.mbReceiveBufs[i];
 				this.miBufDataSite = 0;
-				this.doUnlock(UNLOCK_READ);//解锁，读取处理完成
-
-				return btBufs;
 			}
-			else
-				return null;
+			this.V(this.mresReceiveBuf);//归还缓存访问权限
 		}
-		else
-			return null;
+		return btBufs;
 	}
 
 	/**
@@ -305,29 +293,26 @@ public abstract class BTSerialComm{
 			//当缓冲池收到数据后，开始等待接收数据段
 			this.mbKillReceiveData_StopFlg = false; //可用killReceiveData_StopFlg()来终止阻塞状态
 			while(this.mbConectOk && !this.mbKillReceiveData_StopFlg){
-				this.doLock(LOCK_READ);//加锁，读取处理
 				/*复制末尾待检查终止符*/
 				for(int i=0; i<iStopCharLen; i++)
 					btCmp[i] = this.mbReceiveBufs[this.miBufDataSite - iStopCharLen + i];
-				this.doUnlock(UNLOCK_READ);//解锁，读取处理完成
+				this.V(this.mresReceiveBuf);//归还缓存访问权限
 				
 				if (CompByte(btCmp,btStopFlg)){ //检查是否为终止符
 					//取出数据时，去掉结尾的终止符
-					this.doLock(LOCK_READ);//加锁，读取处理
+					this.P(this.mresReceiveBuf);//夺取缓存访问权限
 					btBufs = new byte[this.miBufDataSite-iStopCharLen]; //分配存储空间
 					for(int i=0, iLen=this.miBufDataSite-iStopCharLen; i<iLen; i++)
 						btBufs[i] = this.mbReceiveBufs[i];
 					this.miBufDataSite = 0;
-					this.doUnlock(UNLOCK_READ);//解锁，读取处理完成
-					return btBufs;
+					this.V(this.mresReceiveBuf);//归还缓存访问权限
+					break;
 				}
 				else
 					SystemClock.sleep(10);//死循环，等待数据回复
 			}
-			return null;
 		}
-		else
-			return null;
+		return btBufs;
 	}
 	
 	/**
@@ -340,29 +325,20 @@ public abstract class BTSerialComm{
 	}
 
 	/**
-	 * 互斥锁操作：加锁
-	 * @param btType 锁定类型 LOCK_READ / LOCK_WRITE
+	 * 互斥锁P操作：夺取资源
+	 * @param res CResourcePV 资源对象
 	 * */
-	private synchronized void doLock(byte btType){
-		if (LOCK_READ == btType){
-			while(this.mbWriteLock)
-				SystemClock.sleep(2);//延迟后再检查;
-			this.mbReadLock = true;
-		}else if (LOCK_WRITE == btType){
-			while(this.mbReadLock)
-				SystemClock.sleep(2);//延迟后再检查;
-			this.mbWriteLock = true;
-		}
+	private void P(CResourcePV res){
+		while(!res.seizeRes())
+			SystemClock.sleep(2);//资源被占用，延迟检查
+		res.seizeRes(); //夺取一个资源
 	}
 	/**
-	 * 互斥锁操作：解锁
-	 * @param btType 解锁类型 UNLOCK_READ / UNLOCK_WRITE
+	 * 互斥锁V操作：释放资源
+	 *  @param res CResourcePV 资源对象
 	 * */
-	private synchronized void doUnlock(byte btType){
-		if (UNLOCK_READ == btType)
-			this.mbReadLock = false;
-		else if (UNLOCK_WRITE == btType)
-			this.mbWriteLock = false;
+	private void V(CResourcePV res){
+		res.revert(); //归还资源
 	}
 
 	//----------------
@@ -399,7 +375,7 @@ public abstract class BTSerialComm{
 				}
 
 				//开始处理接收到的数据
-				doLock(LOCK_WRITE);//加锁开始写缓冲池
+				P(mresReceiveBuf);//夺取缓存访问权限
 				mlRxd += iReadCnt; //记录接收的字节总数
 				/*检查缓冲池是否溢出，如果溢出则指针标志位归0*/
 				if ( (miBufDataSite + iReadCnt) > iBUF_TOTAL)
@@ -408,7 +384,7 @@ public abstract class BTSerialComm{
 				for(int i=0; i<iReadCnt; i++)
 					mbReceiveBufs[miBufDataSite + i] = btButTmp[i];
 				miBufDataSite += iReadCnt; //保存本次接收的数据长度
-				doUnlock(UNLOCK_WRITE);//解锁，写入完毕
+				V(mresReceiveBuf);//归还缓存访问权限
 			}
 			return THREAD_END;
 		}

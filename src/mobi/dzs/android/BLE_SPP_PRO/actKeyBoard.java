@@ -827,11 +827,11 @@ public class actKeyBoard extends BaseCommActivity{
 			while(!mbThreadStop){
 				if (!mBSC.isConnect())
 					return CONNECT_LOST; //检查连接是否丢失
-				
-				if (mBSC.getReceiveBufLen() > 0){
+				else
 					SystemClock.sleep(10);//接收等待延时，提高接收效率
+				
+				if (mBSC.getReceiveBufLen() > 0)
 					this.publishProgress(mBSC.Receive());
-				}
 			}
 			return THREAD_END;
 		}
