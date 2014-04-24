@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="mobi.dzs.android.BLE_SPP_PRO"
-	android:versionCode="10"
-	android:versionName="0.10" >
+	android:versionCode="11"
+	android:versionName="0.11" >
 
 	<uses-sdk
 		android:minSdkVersion="15"
@@ -30,7 +30,7 @@
 		<activity android:name="actDiscovery"
 			android:label="@string/actDiscovery_name"
 			android:screenOrientation="portrait"
-			android:launchMode="singleTop"/>
+			android:launchMode="standard" android:configChanges="keyboardHidden|navigation|orientation|screenSize"/>
 		<activity android:name="actByteStream"
 			android:label="@string/actByteStream_name"
 			android:launchMode="singleTop"
@@ -45,7 +45,7 @@
 			android:configChanges="keyboardHidden|navigation|orientation|screenSize" android:screenOrientation="portrait"/>
 		<activity android:name="mobi.dzs.android.BLE_SPP_PRO.actAbout"
             android:label="@string/actAbout_name"
-            android:launchMode="singleTop"/>
+            android:launchMode="standard"/>
 	</application>
 
 </manifest>

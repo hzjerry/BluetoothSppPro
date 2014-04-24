@@ -57,7 +57,7 @@ public class CHexConver
     	hexStr = hexStr.toString().trim().replace(" ", "").toUpperCase(Locale.US);
         char[] hexs = hexStr.toCharArray();  
         byte[] bytes = new byte[hexStr.length() / 2];  
-        int n;  
+        int n;
 
         for (int i = 0; i < bytes.length; i++){  
             n = mHexStr.indexOf(hexs[2 * i]) * 16;  

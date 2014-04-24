@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -23,8 +24,7 @@ import android.widget.Toast;
  * Communication modes: byte-stream mode
  * @author JerryLi
  * */
-public class actByteStream extends BaseCommActivity
-{
+public class actByteStream extends BaseCommActivity{
 	/**Control: the Send button*/
 	private ImageButton mibtnSend = null;
 	/**Controls: input box*/
@@ -38,8 +38,7 @@ public class actByteStream extends BaseCommActivity
 	 * Page construction
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_byte_stream);
 		
@@ -66,8 +65,7 @@ public class actByteStream extends BaseCommActivity
 	 * 析构
 	 * */
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy(){
     	super.onDestroy();
     	//Save for auto-complete control word command history
     	this.saveAutoComplateCmdHistory(this.getLocalClassName());
@@ -77,8 +75,7 @@ public class actByteStream extends BaseCommActivity
 	 * Screen rotation processing
 	 * */
 	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 		this.mactvInput.setInputType(InputType.TYPE_NULL); //Close soft keyboard
 	}
@@ -87,8 +84,7 @@ public class actByteStream extends BaseCommActivity
 	 * add top menu
 	 * */
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         MenuItem miClear = menu.add(0, MEMU_CLEAR, 0, getString(R.string.menu_clear));
         miClear.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -107,10 +103,8 @@ public class actByteStream extends BaseCommActivity
 	 * Menu click execute instructions
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {  
+        switch(item.getItemId())  {
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	        	this.mbThreadStop = true; //Termination of the receiving thread
@@ -144,18 +138,15 @@ public class actByteStream extends BaseCommActivity
 	 * 界面的控件初始化
 	 * @return void
 	 * */
-	private void initCtl()
-	{
+	private void initCtl(){
 		this.mibtnSend.setEnabled(false);
 		this.refreshRxdCount();
 		this.refreshTxdCount();
 		
 		/*监听：输入框没有内容时，发送按钮不可用*/
-		this.mactvInput.addTextChangedListener(new TextWatcher()
-		{
+		this.mactvInput.addTextChangedListener(new TextWatcher(){
 			@Override
-			public void afterTextChanged(Editable arg0)
-			{
+			public void afterTextChanged(Editable arg0){
 				if (arg0.length() > 0)
 					mibtnSend.setEnabled(true);
 				else
@@ -163,13 +154,11 @@ public class actByteStream extends BaseCommActivity
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
-			{
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3){
 			}
 
 			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3)
-			{
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3){
 			}
 			
 		});
@@ -182,10 +171,8 @@ public class actByteStream extends BaseCommActivity
      * @param data
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (KeyEvent.KEYCODE_BACK == keyCode)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (KeyEvent.KEYCODE_BACK == keyCode){
         	this.mbThreadStop = true; //终止接收线程
         	this.setResult(Activity.RESULT_CANCELED, null);
         	this.finish();
@@ -199,8 +186,7 @@ public class actByteStream extends BaseCommActivity
      * Auto scroll processing
      * @return void
      * */
-    private void autoScroll()
-    {
+    private void autoScroll(){
 		//自动滚屏处理
 		int iOffset = this.mtvReceive.getMeasuredHeight() - this.msvCtl.getHeight();     
         if (iOffset > 0)
@@ -210,8 +196,7 @@ public class actByteStream extends BaseCommActivity
     /**
      * 保存收到的数据到SD卡文件中
      * */
-    private void saveData2File()
-    {
+    private void saveData2File(){
     	if (this.mtvReceive.length() > 0)
     		this.save2SD(this.mtvReceive.getText().toString().trim());
     }
@@ -219,13 +204,10 @@ public class actByteStream extends BaseCommActivity
     /**
      * Send button event handler
      * */
-    public void onClickBtnSend(View c)
-    {
+    public void onClickBtnSend(View c){
     	String sSend = this.mactvInput.getText().toString().trim();
-    	if (BluetoothSppClient.IO_MODE_HEX == this.mbtOutputMode)
-    	{	//当使用HEX发送时，对发送内容做检查
-    		if (!CHexConver.checkHexStr(sSend))
-    		{
+    	if (BluetoothSppClient.IO_MODE_HEX == this.mbtOutputMode){	//当使用HEX发送时，对发送内容做检查
+    		if (!CHexConver.checkHexStr(sSend)){
     			Toast.makeText(this, //提示 本次发送失败
 				   getString(R.string.msg_not_hex_string),
 				   Toast.LENGTH_SHORT).show();
@@ -235,20 +217,16 @@ public class actByteStream extends BaseCommActivity
     	
     	this.mibtnSend.setEnabled(false);// 禁用发送按钮
 //    	sSend += "\r\n"; 
-    	if (this.mBSC.Send(sSend) >= 0)
-    	{
+    	if (this.mBSC.Send(sSend) >= 0){
     		this.refreshTxdCount(); //刷新发送数据计值
     		this.mibtnSend.setEnabled(true); //发送成功恢复发送按钮
     		this.addAutoComplateVal(sSend, this.mactvInput); //追加自动完成值
-    	}
-    	else
-    	{
+    	}else{
 			Toast.makeText(this, //提示 连接丢失
 					   getString(R.string.msg_msg_bt_connect_lost),
 					   Toast.LENGTH_LONG).show();
 			this.mactvInput.setEnabled(false); //禁用输入框
     	}
-    		
     }
     
     //----------------
@@ -273,25 +251,16 @@ public class actByteStream extends BaseCommActivity
 		  * 线程异步处理
 		  */
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			mBSC.Receive(); //首次启动调用一次以启动接收线程
-			while(!mbThreadStop)
-			{
+			while(!mbThreadStop){
 				if (!mBSC.isConnect())//检查连接是否丢失
 					return (int)CONNECT_LOST; 
 				
-				if (mBSC.getReceiveBufLen() > 0)
+				if (mBSC.getReceiveBufLen() > 0){
+					SystemClock.sleep(20); //先延迟让缓冲区填满
 					this.publishProgress(mBSC.Receive());
-				
-				try
-				{
-					Thread.sleep(20);//接收等待延时，提高接收效率
 				}
-				catch (InterruptedException e)
-				{
-					return (int)THREAD_END;
-				} 
 			}
 			return (int)THREAD_END;
 		}
@@ -300,8 +269,7 @@ public class actByteStream extends BaseCommActivity
 		 * 线程内更新处理
 		 */
 		@Override
-		public void onProgressUpdate(String... progress)
-		{
+		public void onProgressUpdate(String... progress){
 			mtvReceive.append(progress[0]); //显示区中追加数据
 			autoScroll(); //自动卷屏处理
 			refreshRxdCount(); //刷新接收数据统计值
@@ -311,8 +279,7 @@ public class actByteStream extends BaseCommActivity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			if (CONNECT_LOST == result) //connection is lost
 				mtvReceive.append(getString(R.string.msg_msg_bt_connect_lost));
 			else

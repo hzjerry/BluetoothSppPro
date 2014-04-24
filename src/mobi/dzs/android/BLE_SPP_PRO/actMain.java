@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import mobi.dzs.android.bluetooth.BluetoothCtrl;
-
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -172,10 +172,14 @@ public class actMain extends Activity
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_main);		
+		setContentView(R.layout.act_main);
+		
+		if (null == mBT){ //系统中不存在蓝牙模块
+			Toast.makeText(this, "Bluetooth module not found", Toast.LENGTH_LONG).show();
+			this.finish();
+		}
 
 		this.mtvDeviceInfo = (TextView)this.findViewById(R.id.actMain_tv_device_info);
 		this.mtvServiceUUID = (TextView)this.findViewById(R.id.actMain_tv_service_uuid);
@@ -195,8 +199,7 @@ public class actMain extends Activity
 	 * 初始化显示界面的控件
 	 * @return void
 	 * */
-	private void initActivityView()
-	{
+	private void initActivityView(){
 		this.mllDeviceCtrl.setVisibility(View.GONE); //隐藏 扫描到的设备信息
 		this.mbtnPair.setVisibility(View.GONE); //隐藏 配对按钮
 		this.mbtnComm.setVisibility(View.GONE); //隐藏 连接按钮
@@ -207,8 +210,7 @@ public class actMain extends Activity
 	 * 析构处理
 	 * */
 	@Override
-	protected void onDestroy() 
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 		
 		this.mGP.closeConn();//关闭连接
@@ -221,8 +223,7 @@ public class actMain extends Activity
 	/**
 	 * 进入搜索蓝牙设备列表页面
 	 * */
-	private void openDiscovery()
-	{
+	private void openDiscovery(){
 		//进入蓝牙设备搜索界面
 		Intent intent = new Intent(this, actDiscovery.class);
 		this.startActivityForResult(intent, REQUEST_DISCOVERY); //等待返回搜索结果
@@ -231,9 +232,7 @@ public class actMain extends Activity
 	/**
 	 * 进入关于页面
 	 * */
-	private void openAbout()
-	{
-		//进入蓝牙设备搜索界面
+	private void openAbout(){
 		Intent intent = new Intent(this, actAbout.class);
 		this.startActivityForResult(intent, REQUEST_ABOUT); //等待返回搜索结果
 	}
@@ -242,8 +241,7 @@ public class actMain extends Activity
 	 * 显示选中这被的信息
 	 * @return void
 	 * */
-	private void showDeviceInfo()
-	{
+	private void showDeviceInfo(){
 		/*显示需要连接的设备信息*/
 		this.mtvDeviceInfo.setText(
 			String.format(getString(R.string.actMain_device_info), 
@@ -259,15 +257,11 @@ public class actMain extends Activity
 	 * 显示Service UUID信息
 	 * @return void
 	 * */
-	private void showServiceUUIDs()
-	{
+	private void showServiceUUIDs(){
 		//对于4.0.3以上的系统支持获取UUID服务内容的操作
-		if (Build.VERSION.SDK_INT >= 15)
-		{
+		if (Build.VERSION.SDK_INT >= 15){
 			new GetUUIDServiceTask().execute("");
-		}
-		else
-		{	//不支持获取uuid service信息
+		}else{	//不支持获取uuid service信息
 			this.mtvServiceUUID.setText(getString(R.string.actMain_msg_does_not_support_uuid_service));
 		}
 	}
@@ -275,12 +269,9 @@ public class actMain extends Activity
 	/**
 	 * 蓝牙设备选择完后返回处理
 	 * */
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if (requestCode == REQUEST_DISCOVERY)
-		{
-			if (Activity.RESULT_OK == resultCode)
-			{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		if (requestCode == REQUEST_DISCOVERY){
+			if (Activity.RESULT_OK == resultCode){
 				this.mllDeviceCtrl.setVisibility(View.VISIBLE); //显示设备信息区
 
 				this.mhtDeviceInfo.put("NAME", data.getStringExtra("NAME"));
@@ -293,24 +284,19 @@ public class actMain extends Activity
 				this.showDeviceInfo();//显示设备信息
 				
 				//如果设备未配对，显示配对操作
-				if (this.mhtDeviceInfo.get("BOND").equals(getString(R.string.actDiscovery_bond_nothing)))
-				{
+				if (this.mhtDeviceInfo.get("BOND").equals(getString(R.string.actDiscovery_bond_nothing))){
 					this.mbtnPair.setVisibility(View.VISIBLE); //显示配对按钮
 					this.mbtnComm.setVisibility(View.GONE); //隐藏通信按钮
 					//提示要显示Service UUID先建立配对
 					this.mtvServiceUUID.setText(getString(R.string.actMain_tv_hint_service_uuid_not_bond));
-				}
-				else
-				{
+				}else{
 					//已存在配对关系，建立与远程设备的连接
 					this.mBDevice = this.mBT.getRemoteDevice(this.mhtDeviceInfo.get("MAC"));
 					this.showServiceUUIDs();//显示设备的Service UUID列表
 					this.mbtnPair.setVisibility(View.GONE); //隐藏配对按钮
 					this.mbtnComm.setVisibility(View.VISIBLE); //显示通信按钮
 				}
-			}
-			else if (Activity.RESULT_CANCELED == resultCode)
-			{
+			}else if (Activity.RESULT_CANCELED == resultCode){
 				//未操作，结束程序
 				this.finish();
 			}
@@ -318,8 +304,7 @@ public class actMain extends Activity
 		else if (REQUEST_BYTE_STREAM == requestCode || REQUEST_CMD_LINE == requestCode ||
 				 REQUEST_KEY_BOARD == requestCode)
 		{	//从通信模式返回的处理
-			if (null == this.mGP.mBSC || !this.mGP.mBSC.isConnect())
-			{	//通信连接丢失，重新连接
+			if (null == this.mGP.mBSC || !this.mGP.mBSC.isConnect()){	//通信连接丢失，重新连接
 				this.mllChooseMode.setVisibility(View.GONE); //隐藏 通信模式选择
 				this.mbtnComm.setVisibility(View.VISIBLE); //显示 建立通信按钮
 				this.mGP.closeConn();//释放连接对象
@@ -334,8 +319,7 @@ public class actMain extends Activity
 	 * 配对按钮的单击事件
 	 * @return void
 	 * */
-	public void onClickBtnPair(View v)
-	{
+	public void onClickBtnPair(View v){
 		new PairTask().execute(this.mhtDeviceInfo.get("MAC"));
 		this.mbtnPair.setEnabled(false); //冻结配对按钮
 	}
@@ -345,8 +329,7 @@ public class actMain extends Activity
      * 建立成功后出现通信模式的选择按钮
      * @return void
      * */
-	public void onClickBtnConn(View v)
-    {
+	public void onClickBtnConn(View v){
 		new connSocketTask().execute(this.mBDevice.getAddress());
     }
 	
@@ -354,8 +337,7 @@ public class actMain extends Activity
 	 * 通信模式选择-串行流模式
 	 * @return void
 	 * */
-	public void onClickBtnSerialStreamMode(View v)
-	{
+	public void onClickBtnSerialStreamMode(View v){
 		//进入串行流模式
 		Intent intent = new Intent(this, actByteStream.class);
 		this.startActivityForResult(intent, REQUEST_BYTE_STREAM); //等待返回搜索结果
@@ -365,8 +347,7 @@ public class actMain extends Activity
 	 * 通信模式选择-键盘模式
 	 * @return void
 	 * */
-	public void onClickBtnKeyBoardMode(View v)
-	{
+	public void onClickBtnKeyBoardMode(View v){
 		//进入键盘模式界面
 		Intent intent = new Intent(this, actKeyBoard.class);
 		this.startActivityForResult(intent, REQUEST_KEY_BOARD); //等待返回搜索结果
@@ -376,8 +357,7 @@ public class actMain extends Activity
 	 * 通信模式选择-命令行模式
 	 * @return void
 	 * */
-	public void onClickBtnCommandLine(View v)
-	{
+	public void onClickBtnCommandLine(View v){
 		//进入命令行模式界面
 		Intent intent = new Intent(this, actCmdLine.class);
 		this.startActivityForResult(intent, REQUEST_CMD_LINE); //等待返回搜索结果
@@ -385,12 +365,9 @@ public class actMain extends Activity
 
     //----------------
     /*多线程处理(开机时启动蓝牙)*/
-    private class startBluetoothDeviceTask extends AsyncTask<String, String, Integer>
-    {
+    private class startBluetoothDeviceTask extends AsyncTask<String, String, Integer>{
     	/**常量:蓝牙已经启动*/
     	private static final int RET_BULETOOTH_IS_START = 0x0001;
-    	/**常量:休眠遇到错误(不应该出现这个错误)*/
-    	private static final int RET_SLEEP_FAILE = 0x0002;
     	/**常量:设备启动失败*/
     	private static final int RET_BLUETOOTH_START_FAIL = 0x04;
     	
@@ -405,8 +382,7 @@ public class actMain extends Activity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 	    	/*定义进程对话框*/
 			mpd = new ProgressDialog(actMain.this);
 			mpd.setMessage(getString(R.string.actDiscovery_msg_starting_device));//蓝牙启动中
@@ -418,29 +394,18 @@ public class actMain extends Activity
 	
 		/**异步的方式启动蓝牙，如果蓝牙已经启动则直接进入扫描模式*/
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			int iWait = miWATI_TIME * 1000;//倒减计数器
 			/* BT isEnable */
-			if (!mBT.isEnabled())
-			{
+			if (!mBT.isEnabled()){
 				mBT.enable(); //启动蓝牙设备
 				//等待miSLEEP_TIME秒，启动蓝牙设备后再开始扫描
-				while(iWait > 0)
-				{
+				while(iWait > 0){
 					if (!mBT.isEnabled())
 						iWait -= miSLEEP_TIME; //剩余等待时间计时
 					else
 						break; //启动成功跳出循环
-					
-					try
-					{
-						Thread.sleep(miSLEEP_TIME);
-					}
-					catch (InterruptedException e)
-					{
-						return RET_SLEEP_FAILE; //延迟错误
-					}
+					SystemClock.sleep(miSLEEP_TIME);
 				}
 				if (iWait < 0) //表示在规定时间内,蓝牙设备未启动
 					return RET_BLUETOOTH_START_FAIL;
@@ -452,21 +417,17 @@ public class actMain extends Activity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			if (mpd.isShowing())
 				mpd.dismiss();//关闭等待对话框
 			
-			if (RET_BLUETOOTH_START_FAIL == result)
-			{	//蓝牙设备启动失败
+			if (RET_BLUETOOTH_START_FAIL == result){	//蓝牙设备启动失败
 				AlertDialog.Builder builder = new AlertDialog.Builder(actMain.this); //对话框控件
     	    	builder.setTitle(getString(R.string.dialog_title_sys_err));//设置标题
     	    	builder.setMessage(getString(R.string.actDiscovery_msg_start_bluetooth_fail));
-    	    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener()
-    	    	{
+    	    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener(){
     	            @Override
-    	            public void onClick(DialogInterface dialog, int which)
-    	            {
+    	            public void onClick(DialogInterface dialog, int which){
     	            	mBT.disable();
     	            	//蓝牙设备无法启动，直接终止程序
     	            	finish();
@@ -474,8 +435,7 @@ public class actMain extends Activity
     	    	}); 
     	    	builder.create().show();
 			}
-			else if (RET_BULETOOTH_IS_START == result)
-			{	//蓝牙启动成功
+			else if (RET_BULETOOTH_IS_START == result){	//蓝牙启动成功
 				openDiscovery(); //进入搜索页面
 			}
 		}
@@ -483,8 +443,7 @@ public class actMain extends Activity
     
     //----------------
     /*多线程处理(配对处理线程)*/
-    private class PairTask extends AsyncTask<String, String, Integer>
-    {
+    private class PairTask extends AsyncTask<String, String, Integer>{
 		/**常量:配对成功*/
 		static private final int RET_BOND_OK = 0x00;
 		/**常量: 配对失败*/
@@ -495,8 +454,7 @@ public class actMain extends Activity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
     		//提示开始建立配对
 			Toast.makeText(actMain.this, 
 					   getString(R.string.actMain_msg_bluetooth_Bonding),
@@ -509,32 +467,21 @@ public class actMain extends Activity
 		}
 		
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
     		final int iStepTime = 150;
     		int iWait = iTIMEOUT; //设定超时等待时间
-    		try
-    		{	//开始配对
+    		try{	//开始配对
     			//获得远端蓝牙设备
     			mBDevice = mBT.getRemoteDevice(arg0[0]);
 				BluetoothCtrl.createBond(mBDevice);
 				mbBonded = false; //初始化配对完成标志
-			}
-    		catch (Exception e1)
-    		{	//配对启动失败
+			}catch (Exception e1){	//配对启动失败
 				Log.d(getString(R.string.app_name), "create Bond failed!");
 				e1.printStackTrace();
 				return RET_BOND_FAIL;
 			}
-			while(!mbBonded && iWait > 0)
-			{
-				try
-				{
-					Thread.sleep(iStepTime);
-				}
-				catch (InterruptedException e)
-				{
-				}
+			while(!mbBonded && iWait > 0){
+				SystemClock.sleep(iStepTime);
 				iWait -= iStepTime;
 			}
 			return (int) ((iWait > 0)? RET_BOND_OK : RET_BOND_FAIL);
@@ -544,12 +491,10 @@ public class actMain extends Activity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			unregisterReceiver(_mPairingRequest); //注销监听
 			
-        	if (RET_BOND_OK == result)//配对建立成功
-        	{
+        	if (RET_BOND_OK == result){//配对建立成功
 				Toast.makeText(actMain.this, 
 						   getString(R.string.actMain_msg_bluetooth_Bond_Success),
 						   Toast.LENGTH_SHORT).show();
@@ -558,18 +503,13 @@ public class actMain extends Activity
 				mhtDeviceInfo.put("BOND", getString(R.string.actDiscovery_bond_bonded));//显示已绑定
 				showDeviceInfo();//刷新配置信息
 				showServiceUUIDs();//显示远程设备提供的服务
-        	}
-        	else
-        	{	//在指定时间内未完成配对
+        	}else{	//在指定时间内未完成配对
 				Toast.makeText(actMain.this, 
 						   getString(R.string.actMain_msg_bluetooth_Bond_fail),
 						   Toast.LENGTH_LONG).show();
-				try
-				{
+				try{
 					BluetoothCtrl.removeBond(mBDevice);
-				}
-				catch (Exception e)
-				{
+				}catch (Exception e){
 					Log.d(getString(R.string.app_name), "removeBond failed!");
 					e.printStackTrace();
 				}
@@ -580,8 +520,7 @@ public class actMain extends Activity
     
     //----------------
     /*多线程处理(读取UUID Service信息线程)*/
-    private class GetUUIDServiceTask extends AsyncTask<String, String, Integer>
-    {
+    private class GetUUIDServiceTask extends AsyncTask<String, String, Integer>{
     	/**延时等待时间*/
     	private static final int miWATI_TIME = 4 * 1000;
     	/**每次检测的时间*/
@@ -592,8 +531,7 @@ public class actMain extends Activity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 			mslUuidList.clear();
 			//提示UUID服务搜索中
 			mtvServiceUUID.setText(getString(R.string.actMain_find_service_uuids));
@@ -607,65 +545,40 @@ public class actMain extends Activity
 		 * 线程异步处理
 		 */
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			int iWait = miWATI_TIME;//倒减计数器
-			int iUuidList = 0;
-			StringBuilder sbTmp = new StringBuilder();
 			
 			if (!this.mbFindServiceIsRun)
 				return null; //UUID Service扫瞄服务器启动失败
 			
-			while(iWait > 0)
-			{
+			while(iWait > 0){
 				if (mslUuidList.size() > 0 && iWait > 1500)
 					iWait = 1500; //如果找到了第一个UUID则继续搜索N秒后结束
-				try
-				{
-					Thread.sleep(miREF_TIME);
-				}
-				catch (InterruptedException e)
-				{
-				}
+				SystemClock.sleep(miREF_TIME);
 				iWait -= miREF_TIME;//每次循环减去刷新时间
-				
-				//如果存在数据，则自动刷新
-				if (mslUuidList.size() > 0 && mslUuidList.size() != iUuidList)
-				{
-					for(int i=0; i<mslUuidList.size(); i++)
-						sbTmp.append(mslUuidList.get(i) + "\n");
-					this.publishProgress(sbTmp.toString());
-					iUuidList = mslUuidList.size();//保存当前列表中的数据量
-				}
 			}
 			return null;
-		}
-		
-		/**
-		  * 线程内更新UI
-		  */
-	     protected void onProgressUpdate(String... progress)
-	     {
-	    	 mtvServiceUUID.setText(progress[0]);
-	     }
-    	
+		}    	
 		/**
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
-			unregisterReceiver(_mGetUuidServiceReceiver); //注销监听
-			
-			if (mslUuidList.size() == 0) //未发现UUIS服务列表
+		public void onPostExecute(Integer result){
+			StringBuilder sbTmp = new StringBuilder();
+			unregisterReceiver(_mGetUuidServiceReceiver); //注销广播监听
+			//如果存在数据，则自动刷新
+			if (mslUuidList.size() > 0){
+				for(int i=0; i<mslUuidList.size(); i++)
+					sbTmp.append(mslUuidList.get(i) + "\n");
+				mtvServiceUUID.setText(sbTmp.toString());
+			}else//未发现UUIS服务列表
 				mtvServiceUUID.setText(R.string.actMain_not_find_service_uuids);
 		}
     }
     
     //----------------
     /*多线程处理(建立蓝牙设备的串行通信连接)*/
-    private class connSocketTask extends AsyncTask<String, String, Integer>
-    {
+    private class connSocketTask extends AsyncTask<String, String, Integer>{
     	/**进程等待提示框*/
     	private ProgressDialog mpd = null;
     	/**常量:连接建立失败*/
@@ -677,8 +590,7 @@ public class actMain extends Activity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 	    	/*定义进程对话框*/
 			this.mpd = new ProgressDialog(actMain.this);
 			this.mpd.setMessage(getString(R.string.actMain_msg_device_connecting));
@@ -688,8 +600,7 @@ public class actMain extends Activity
 		}
 		
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			if (mGP.createConn(arg0[0]))
 				return CONN_SUCCESS; //建立成功
 			else
@@ -700,20 +611,16 @@ public class actMain extends Activity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			this.mpd.dismiss();
 			
-			if (CONN_SUCCESS == result)
-			{	//通信连接建立成功
+			if (CONN_SUCCESS == result){	//通信连接建立成功
 				mbtnComm.setVisibility(View.GONE); //隐藏 建立通信按钮
 				mllChooseMode.setVisibility(View.VISIBLE); //显示通信模式控制面板
 				Toast.makeText(actMain.this, 
 						   getString(R.string.actMain_msg_device_connect_succes),
 						   Toast.LENGTH_SHORT).show();
-			}
-			else
-			{	//通信连接建立失败
+			}else{	//通信连接建立失败
 				Toast.makeText(actMain.this, 
 						   getString(R.string.actMain_msg_device_connect_fail),
 						   Toast.LENGTH_SHORT).show();

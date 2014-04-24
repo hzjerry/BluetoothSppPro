@@ -15,6 +15,7 @@ public class globalPool extends Application
 	 * */
 	@Override
 	public void onCreate(){
+		super.onCreate();
 		this.mDS = new DynamicStorage(this);
 	}
 	

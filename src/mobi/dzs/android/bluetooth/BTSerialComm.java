@@ -228,7 +228,7 @@ public abstract class BTSerialComm{
 	 *
 	 * @return null:未连接或连接中断/byte[]:取到的新数据
 	 * */
-	final protected byte[] ReceiveData(){
+	final protected synchronized byte[] ReceiveData(){
 		byte[] btBufs = null;
 		if (mbConectOk){
 			if (!this.mbReceiveThread){

@@ -32,8 +32,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class actKeyBoard extends BaseCommActivity
-{
+public class actKeyBoard extends BaseCommActivity{
 	/**当前使用的结束符*/
 	private String msEndFlg = msEND_FLGS[0];
 	/**常量:菜单变量-设置结束符*/
@@ -85,11 +84,9 @@ public class actKeyBoard extends BaseCommActivity
 	/**当前是否隐藏发送区*/
 	private boolean mbHideSendArea = false;
 	/**定义重复执行按钮的动作函数*/
-	private class CRL implements ButtonPassListener
-	{
+	private class CRL implements ButtonPassListener{
 		@Override
-		public void onRepeat(View v, long duration, int repeatcount)
-		{
+		public void onRepeat(View v, long duration, int repeatcount){
 			if(mbSetMode)
 				return;//长按事件下不能进入按钮设置模式。
 			else
@@ -97,14 +94,12 @@ public class actKeyBoard extends BaseCommActivity
 		}
 
 		@Override
-		public void onDown(View v)
-		{
+		public void onDown(View v){
 			onBtnClick_Array(v);
 		}
 
 		@Override
-		public void onUp(View v)
-		{
+		public void onUp(View v){
 			onBtnClick_Array(v);
 		}
 	};	
@@ -114,8 +109,7 @@ public class actKeyBoard extends BaseCommActivity
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_keyboard);
 		
@@ -130,24 +124,18 @@ public class actKeyBoard extends BaseCommActivity
 		this.mtvRecAreaTitle.append(getString(R.string.tips_click_to_hide));//设置接收区标题
 		this.mtvRecAreaTitle.append(":"+ getString(R.string.tv_send_area_title));//设置接收区标题
 		this.mtvRecAreaTitle.append(")");//设置发送区标题
-		this.mtvRecAreaTitle.setOnClickListener(new TextView.OnClickListener()
-		{	//处理发送区的显示与隐藏
+		this.mtvRecAreaTitle.setOnClickListener(new TextView.OnClickListener(){ //处理发送区的显示与隐藏
 			@Override
-			public void onClick(View v)
-			{
-				if (v.getId() == R.id.actKeyBoard_tv_receive_area_title)
-				{
+			public void onClick(View v){
+				if (v.getId() == R.id.actKeyBoard_tv_receive_area_title){
 					String sTitle = getString(R.string.tv_receive_area_title);
 					TextView tv = ((TextView)v);
-					if (mbHideSendArea)
-					{
+					if (mbHideSendArea){
 						sTitle += "\t\t("+ getString(R.string.tips_click_to_hide);
 						sTitle += ":"+ getString(R.string.tv_send_area_title) +")";
 						tv.setText(sTitle);
 						mrlSendArea.setVisibility(View.VISIBLE);
-					}
-					else
-					{
+					}else{
 						sTitle += "\t\t("+ getString(R.string.tips_click_to_show);
 						sTitle += ":"+ getString(R.string.tv_send_area_title) +")";
 						tv.setText(sTitle);
@@ -195,8 +183,7 @@ public class actKeyBoard extends BaseCommActivity
 	
     /**初始化控件的大小*/
     @Override
-    public void onResume()
-    {
+    public void onResume(){
     	super.onResume();
     	Display display = this.getWindowManager().getDefaultDisplay();
     	Point size = new Point();
@@ -204,8 +191,7 @@ public class actKeyBoard extends BaseCommActivity
     	
     	int iHeight = (size.x / 3) * 2 / 3; //按钮高度;
     	
-    	for(int i=0; i<miBTN_CNT; i++)
-    	{
+    	for(int i=0; i<miBTN_CNT; i++){
 			LayoutParams btnPara = mbtns[i].getLayoutParams();
 			btnPara.height = iHeight;//将按钮设置为长方形
 			mbtns[i].setLayoutParams(btnPara);
@@ -216,8 +202,7 @@ public class actKeyBoard extends BaseCommActivity
 	 * 析构
 	 * */
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy(){
     	super.onDestroy();
     	this.mBSC.killReceiveData_StopFlg(); //强制终止接收函数
     }
@@ -226,8 +211,7 @@ public class actKeyBoard extends BaseCommActivity
 	 * 屏幕旋转时的处理
 	 * */
 	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 	}
 	
@@ -235,8 +219,7 @@ public class actKeyBoard extends BaseCommActivity
 	 * add top menu
 	 * */
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         //清屏
         MenuItem miClear = menu.add(0, MEMU_CLEAR, 0, getString(R.string.menu_clear));
@@ -269,10 +252,8 @@ public class actKeyBoard extends BaseCommActivity
 	 * 菜单点击后的执行指令
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {
+    public boolean onMenuItemSelected(int featureId, MenuItem item){  
+        switch(item.getItemId()){
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	        	this.mBSC.killReceiveData_StopFlg(); //强制终止接收函数
@@ -285,13 +266,10 @@ public class actKeyBoard extends BaseCommActivity
 	        	this.mtvRecView.setText("");
 	        	return true;
 	        case MENU_SET_KEY_BOARD: //设置键盘
-	        	if (this.mbSetMode)
-	        	{	
+	        	if (this.mbSetMode){	
 	        		item.setTitle(R.string.menu_set_key_board_start);
 	        		this.mtvSendView.setText(R.string.actKeyBoard_tv_Init);
-	        	}
-	        	else
-	        	{	
+	        	}else{	
 	        		item.setTitle(R.string.menu_set_key_board_end);
 	        		this.mtvSendView.setText(R.string.actKeyBoard_tv_set_keyboard_helper);
 	        	}
@@ -330,16 +308,13 @@ public class actKeyBoard extends BaseCommActivity
      * @param data
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (KeyEvent.KEYCODE_BACK == keyCode)
-        {	//按回退键的处理
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (KeyEvent.KEYCODE_BACK == keyCode){	//按回退键的处理
         	this.mbThreadStop = true; //终止接收线程
         	this.setResult(Activity.RESULT_CANCELED, null);
         	this.finish();
         	return true;
-        }
-        else
+        }else
         	return super.onKeyDown(keyCode, event);
     }
     
@@ -348,8 +323,7 @@ public class actKeyBoard extends BaseCommActivity
      * @param byte bMode 字符显示模式 IO_MODE_HEX / IO_MODE_STRING
      * @return void
      * */
-	private void selectEndFlg()
-    {
+	private void selectEndFlg(){
 		final AlertDialog adCtrl;
     	final RadioGroup rgEndFlg;
     	final RadioButton rb_rn, rb_n, rb_other;
@@ -366,32 +340,25 @@ public class actKeyBoard extends BaseCommActivity
     	etVal =(EditText)view.findViewById(R.id.et_end_flg_val);
 
     	builder.setView(view);//绑定布局
-    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener()
-    	{
+    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener(){
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which){
             	//设置输入输出的模式
             	String sHexEndFlg = etVal.getText().toString().trim();
-            	if (sHexEndFlg.isEmpty())
-            	{	//未设置终止符
+            	if (sHexEndFlg.isEmpty()){	//未设置终止符
             		msEndFlg = new String();
             		mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
-            	}
-            	else if (CHexConver.checkHexStr(sHexEndFlg))
-            	{
+            	}else if (CHexConver.checkHexStr(sHexEndFlg)){
 	            	msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
 	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
 	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
 	            	mDS.saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
-            	}
-            	else
-            	{
+            	}else{
 					Toast.makeText(actKeyBoard.this, //提示 连接丢失
 						   getString(R.string.msg_not_hex_string),
 						   Toast.LENGTH_SHORT).show();
@@ -411,40 +378,29 @@ public class actKeyBoard extends BaseCommActivity
     		rb_other.setChecked(true);
     	
     	/*设置按钮组的监听事件*/
-    	rgEndFlg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-    	{
+    	rgEndFlg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 			@Override
-			public void onCheckedChanged(RadioGroup arg0, int arg1)
-			{
-				if (rb_rn.getId() == arg1)
-				{
+			public void onCheckedChanged(RadioGroup arg0, int arg1){
+				if (rb_rn.getId() == arg1){
 					msEndFlg = msEND_FLGS[0];
 					etVal.setEnabled(false); //不可修改
-				}
-				else if (rb_n.getId() == arg1)
-				{
+				}else if (rb_n.getId() == arg1){
 					msEndFlg = msEND_FLGS[1];
 					etVal.setEnabled(false); //不可修改
-				}
-				else
+				}else
 					etVal.setEnabled(true); //可修改
 				etVal.setText(CHexConver.str2HexStr(msEndFlg));//输出HEX字符串
 			}
     	});
     	/*结束符的输入框的监听*/
-    	etVal.addTextChangedListener(new TextWatcher()
-    	{
+    	etVal.addTextChangedListener(new TextWatcher(){
 			@Override
-			public void afterTextChanged(Editable arg0)
-			{
+			public void afterTextChanged(Editable arg0){
 				String sEndFlg = etVal.getText().toString().trim();
-				if (sEndFlg.isEmpty() || CHexConver.checkHexStr(sEndFlg))
-				{
+				if (sEndFlg.isEmpty() || CHexConver.checkHexStr(sEndFlg)){
 					etVal.setTextColor(android.graphics.Color.BLACK);
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-				}
-				else
-				{
+				}else{
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 					etVal.setTextColor(android.graphics.Color.RED);
 				}
@@ -466,18 +422,15 @@ public class actKeyBoard extends BaseCommActivity
      * 保存收到的数据到SD卡文件中
      * @return void
      * */
-    private void saveData2File()
-    {
+    private void saveData2File(){
     	StringBuilder sb = new StringBuilder();
-    	if (this.mtvRecView.length() > 0)
-    	{
+    	if (this.mtvRecView.length() > 0){
     		sb.append("Receive Data:\n");
     		sb.append("--------------------------\n");
     		sb.append(this.mtvRecView.getText().toString().trim());
     		sb.append("\n\n");
     	}
-    	if (this.mtvRecView.length() > 0)
-    	{
+    	if (this.mtvRecView.length() > 0){
     		sb.append("Send Data:\n");
     		sb.append("--------------------------\n");
     		sb.append(this.mtvSendView.getText().toString().trim());
@@ -488,13 +441,11 @@ public class actKeyBoard extends BaseCommActivity
 	/**
 	 * 载入按钮配置信息
 	 * */
-	private void loadBtnProfile()
-	{
+	private void loadBtnProfile(){
 		String sTmp;
 		final String sModel = this.getLocalClassName();
     	//键盘按钮值初始化
-    	for(int i=0; i<miBTN_CNT; i++)
-    	{
+    	for(int i=0; i<miBTN_CNT; i++){
     		String sName = this.mDS.getStringVal(sModel, SUB_KEY_BTN_NAME.concat(String.valueOf(i)));
     		String sValue = this.mDS.getStringVal(sModel, SUB_KEY_BTN_VAL.concat(String.valueOf(i)));
     		
@@ -508,13 +459,10 @@ public class actKeyBoard extends BaseCommActivity
     	}
 		//按钮激发模式初始化
 		byte btBtnEvent = (byte)this.mDS.getIntVal(this.getLocalClassName(), SUB_KEY_BTN_EVENT);
-		if (0 == btBtnEvent)
-		{	//默认为按钮抬起时触发
+		if (0 == btBtnEvent){	//默认为按钮抬起时触发
 			this.setBtnBindEvent(RepeatingButton.mEVENT_UP);
 			this.mtvRecView.append(getString(R.string.menu_button_event_up) + "\n");
-		}
-		else
-		{	//载入之前保存的激发模式
+		}else{	//载入之前保存的激发模式
 			this.setBtnBindEvent(btBtnEvent);
 			if (RepeatingButton.mEVENT_UP == btBtnEvent)
 				this.mtvRecView.append(getString(R.string.menu_button_event_up) + "\n");
@@ -531,8 +479,7 @@ public class actKeyBoard extends BaseCommActivity
 		else
 			this.setBtnRepeatFreq(iRepeat);
 		
-		if (RepeatingButton.mEVENT_REPEAT == btBtnEvent)
-		{	//当为长按模式才会显示触发频率的提示
+		if (RepeatingButton.mEVENT_REPEAT == btBtnEvent){	//当为长按模式才会显示触发频率的提示
 			sTmp = String.format(getString(R.string.actKeyBoard_msg_repeat_freq_set)+"\n", iRepeat);
 			this.mtvRecView.append(sTmp);//显示当前设定的促发频率
 		}
@@ -543,20 +490,14 @@ public class actKeyBoard extends BaseCommActivity
      * @param byte bFlg 按钮激发的类型 RepeatingButton.mEVENT_UP/ mEVENT_DOWN / mEVENT_REPEAT
      * @return void
      * */
-    private void setBtnBindEvent(byte btFlg)
-    {
-    	if (RepeatingButton.mEVENT_UP == btFlg)
-    	{
+    private void setBtnBindEvent(byte btFlg){
+    	if (RepeatingButton.mEVENT_UP == btFlg){
 	    	for (int i=0; i<miBTN_CNT; i++)
 	    		this.mbtns[i].bindListener(mCRL, RepeatingButton.mEVENT_UP);
-    	}
-    	else if (RepeatingButton.mEVENT_DOWN == btFlg)
-    	{
+    	}else if (RepeatingButton.mEVENT_DOWN == btFlg){
 	    	for (int i=0; i<miBTN_CNT; i++)
 	    		this.mbtns[i].bindListener(mCRL, RepeatingButton.mEVENT_DOWN);
-    	}
-    	else
-    	{
+    	}else{
     		/**设置按钮的重复执行的频率500ms*/
     		for (int i=0; i<miBTN_CNT; i++)
     			this.mbtns[i].bindListener(500, mCRL);
@@ -571,8 +512,7 @@ public class actKeyBoard extends BaseCommActivity
      * @param long interval 毫秒
      * @return void
      * */
-    private void setBtnRepeatFreq(int interval)
-    {
+    private void setBtnRepeatFreq(int interval){
     	this.miRepateFreq = interval;
 		for (int i=0; i<miBTN_CNT; i++)
 			this.mbtns[i].setRepeatFreq(interval);
@@ -581,8 +521,7 @@ public class actKeyBoard extends BaseCommActivity
     }
     
     /**按钮激发模式选择*/
-    private void selectButtonEvent()
-    {
+    private void selectButtonEvent(){
 	    /*菜单列表初始化*/
 	    String sList[] = new String[]{this.getString(R.string.menu_button_event_up),
 	    							   this.getString(R.string.menu_button_event_down),
@@ -591,12 +530,9 @@ public class actKeyBoard extends BaseCommActivity
 	    /*构造选择框*/
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this); //对话框控件
 	    builder.setTitle(this.getString(R.string.menu_set_key_board_event));//设置标题
-	    builder.setItems(sList, new DialogInterface.OnClickListener()
-	    {  
-    		public void onClick(DialogInterface dialog, int which)
-    		{  
-    			switch (which)
-    			{
+	    builder.setItems(sList, new DialogInterface.OnClickListener(){  
+    		public void onClick(DialogInterface dialog, int which){  
+    			switch (which){
     				case 0:
     					setBtnBindEvent(RepeatingButton.mEVENT_UP); //绑定促发事件
     					mtvSendView.setText(getString(R.string.menu_button_event_up) +"\n");
@@ -621,18 +557,16 @@ public class actKeyBoard extends BaseCommActivity
      * @param String sModelName 模块名称
      * @return void
      * */
-    private void loadProfile()
-    {
+    private void loadProfile(){
     	String sHexEndFlg = this.mDS.getStringVal(this.getLocalClassName(), SUB_KEY_END_FLG);
     	//首次使用判断，默认第一次使用为false，取反则为true
     	boolean bModuleIsUsed = this.mDS.getBooleanVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED);
-    	if (!bModuleIsUsed) //首次使用默认认为(\r\n)
-    	{
+    	if (!bModuleIsUsed){ //首次使用默认认为(\r\n)
+    	
     		this.msEndFlg = msEND_FLGS[0];
     		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true); //标记已经使用过
     		this.mDS.saveStorage();
-    	}
-    	else if (sHexEndFlg.isEmpty())
+    	}else if (sHexEndFlg.isEmpty())
     		this.msEndFlg = ""; //未设置结束符
     	else
     		this.msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
@@ -644,28 +578,21 @@ public class actKeyBoard extends BaseCommActivity
      * 显示当前结束符的设置信息
      * @return void
      * */
-    private void showEndFlg()
-    {
-    	if(msEndFlg.equals(msEND_FLGS[0]))
-    	{
+    private void showEndFlg(){
+    	if(msEndFlg.equals(msEND_FLGS[0])){
     		this.mtvRecView.append(
     				String.format(
     						this.getString(R.string.actKeyBoard_msg_helper_endflg), 
     						this.getString(R.string.dialog_end_flg_rn)));
-    	}
-    	else if(msEndFlg.equals(msEND_FLGS[1]))
-    	{
+    	}else if(msEndFlg.equals(msEND_FLGS[1])){
     		this.mtvRecView.append(
     				String.format(
     						this.getString(R.string.actKeyBoard_msg_helper_endflg), 
     						this.getString(R.string.dialog_end_flg_n)));
-    	}
-    	else
-    	{
+    	}else{
     		if (this.msEndFlg.isEmpty())
     			this.mtvRecView.append(getString(R.string.msg_helper_endflg_nothing));
-    		else
-    		{
+    		else{
     			this.mtvRecView.append(
     				String.format(
     						getString(R.string.actKeyBoard_msg_helper_endflg),
@@ -681,13 +608,10 @@ public class actKeyBoard extends BaseCommActivity
      * @param View v 按钮的单机事件处理
      * @return void
      * */
-    public void onBtnClick_Array(View v)
-    {
+    public void onBtnClick_Array(View v){
     	int iBtnId = v.getId();
-    	for(int i=0; i<miBTN_CNT; i++)
-    	{
-    		if (mbtns[i].getId() == iBtnId)
-    		{	//找到了当前按下的按钮
+    	for(int i=0; i<miBTN_CNT; i++){
+    		if (mbtns[i].getId() == iBtnId){	//找到了当前按下的按钮
     			if (mbSetMode)
     				this.setBtnKeyboard(i);
     			else
@@ -701,10 +625,8 @@ public class actKeyBoard extends BaseCommActivity
      * 数据的发送处理
      * @return void
      * */
-    private void Send(String sData)
-    {
-		if (!sData.equals(""))
-		{
+    private void Send(String sData){
+		if (!sData.equals("")){
 			String sSend = sData;
 			int iRet = 0;
 			if (!this.msEndFlg.isEmpty()) //加入结束符的处理
@@ -712,15 +634,12 @@ public class actKeyBoard extends BaseCommActivity
 			else
 				iRet = this.mBSC.Send(sSend);
 			
-			if (iRet >= 0) //检查通信状态
-			{	//通信正常
+			if (iRet >= 0){ //检查通信状态
 				if (iRet == 0)
 					this.mtvSendView.append(sSend.concat("(fail) "));
 				else
 					this.mtvSendView.append(sSend.concat("(succeed) "));
-			}
-			else
-			{	//链接丢失
+			}else{	//链接丢失
 				Toast.makeText(actKeyBoard.this, //提示 连接丢失
 					   getString(R.string.msg_msg_bt_connect_lost),
 					   Toast.LENGTH_LONG).show();
@@ -736,8 +655,7 @@ public class actKeyBoard extends BaseCommActivity
      * @param final int iId 按钮的ID序号
      * @return void
      * */
-    private void setBtnKeyboard(final int iId)
-    {
+    private void setBtnKeyboard(final int iId){
     	final AlertDialog adCtrl;
     	final EditText tvBtnName, tvSendVal;
     	final String sModel = this.getLocalClassName();
@@ -752,11 +670,9 @@ public class actKeyBoard extends BaseCommActivity
     	tvBtnName.setText(mbtns[iId].getText().toString());//设定初始化值
     	tvSendVal.setText(mhtSendVal.get(iId));
     	builder.setView(view);
-    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener()
-    	{
+    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener(){
     	    @Override
-    	    public void onClick(DialogInterface dialog, int which)
-    	    {
+    	    public void onClick(DialogInterface dialog, int which){
     	    	String sBtnName = tvBtnName.getText().toString().trim();
     	    	String sBtnVal = tvSendVal.getText().toString().trim();
     	    	mbtns[iId].setText(sBtnName);//设定按钮名字
@@ -772,21 +688,15 @@ public class actKeyBoard extends BaseCommActivity
     	adCtrl.show();
     	
     	//对输入值加入验证
-    	tvSendVal.addTextChangedListener(new TextWatcher()
-    	{
+    	tvSendVal.addTextChangedListener(new TextWatcher(){
 			@Override
-			public void afterTextChanged(Editable s)
-			{
+			public void afterTextChanged(Editable s){
 				String sSend = tvSendVal.getText().toString().trim();
-				if (BluetoothSppClient.IO_MODE_HEX == mbtOutputMode)
-				{	//16进制值时对输入做验证
-					if (CHexConver.checkHexStr(sSend))
-					{
+				if (BluetoothSppClient.IO_MODE_HEX == mbtOutputMode){	//16进制值时对输入做验证
+					if (CHexConver.checkHexStr(sSend)){
 						tvSendVal.setTextColor(android.graphics.Color.BLACK);
 						adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-					}
-					else
-					{	//HEX值无效，显示红色
+					}else{	//HEX值无效，显示红色
 						adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 						tvSendVal.setTextColor(android.graphics.Color.RED);
 					}
@@ -794,13 +704,11 @@ public class actKeyBoard extends BaseCommActivity
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after)
-			{
+			public void beforeTextChanged(CharSequence s, int start, int count, int after){
 			}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count)
-			{
+			public void onTextChanged(CharSequence s, int start, int before, int count){
 			}
     		
     	});
@@ -810,8 +718,7 @@ public class actKeyBoard extends BaseCommActivity
      * 选择重复频率
      * @return void
      * */
-    private void selectRepeatFreq()
-    {
+    private void selectRepeatFreq(){
     	final AlertDialog adCtrl;
 	    /*输入框初始化*/
 	    final EditText etFreq = new EditText(this);
@@ -825,11 +732,9 @@ public class actKeyBoard extends BaseCommActivity
 	    AlertDialog.Builder builder = new AlertDialog.Builder(this); //对话框控件
 	    builder.setTitle(this.getString(R.string.dialog_title_keyboard_long_pass_frea));//设置标题
 	    builder.setView(etFreq);
-	    builder.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener()
-	    {
+	    builder.setPositiveButton(getString(R.string.btn_ok), new DialogInterface.OnClickListener(){
 			@Override
-			public void onClick(DialogInterface arg0, int arg1)
-			{
+			public void onClick(DialogInterface arg0, int arg1){
 				int iFreq;
 				//取出设置的频率值
 				if (etFreq.getText().toString().isEmpty())
@@ -857,13 +762,10 @@ public class actKeyBoard extends BaseCommActivity
 				else
 					iFreq = Integer.valueOf(etFreq.getText().toString());
 				
-				if (iFreq >= BTN_REPEAT_MIN_FREQ)
-				{
+				if (iFreq >= BTN_REPEAT_MIN_FREQ){
 					etFreq.setTextColor(android.graphics.Color.BLACK);
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-				}
-				else
-				{
+				}else{
 					etFreq.setTextColor(android.graphics.Color.RED);
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 				}
@@ -886,16 +788,14 @@ public class actKeyBoard extends BaseCommActivity
      * 自动滚屏的处理
      * @return void
      * */
-    private void autoScroll()
-    {
+    private void autoScroll(){
     	int iOffset = 0;
 		//自动滚屏处理
 		iOffset = this.mtvRecView.getMeasuredHeight() - this.msvRecView.getHeight();     
         if (iOffset > 0)
         	this.msvRecView.scrollTo(0, iOffset);
         
-        if (this.mrlSendArea.getVisibility() == View.VISIBLE)
-        {	//当发送区显示的时候，才组刷新处理
+        if (this.mrlSendArea.getVisibility() == View.VISIBLE){	//当发送区显示的时候，才组刷新处理
 			iOffset = this.mtvSendView.getMeasuredHeight() - this.msvSendView.getHeight();     
 	        if (iOffset > 0)
 	        	this.msvSendView.scrollTo(0, iOffset);
@@ -904,8 +804,7 @@ public class actKeyBoard extends BaseCommActivity
     
     //----------------
     /*多线程处理(建立蓝牙设备的串行通信连接)*/
-    private class receiveTask extends AsyncTask<String, String, Integer>
-    {
+    private class receiveTask extends AsyncTask<String, String, Integer>{
     	/**常量:连接丢失*/
     	private final static int CONNECT_LOST = 0x01;
     	/**常量:线程任务结束*/
@@ -914,8 +813,7 @@ public class actKeyBoard extends BaseCommActivity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 			mtvRecView.append(getString(R.string.msg_receive_data_wating));
 			mbThreadStop = false;
 		}
@@ -924,17 +822,16 @@ public class actKeyBoard extends BaseCommActivity
 		  * 线程异步处理
 		  */
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			mBSC.Receive(); //首次启动调用一次以启动接收线程
-			while(!mbThreadStop)
-			{
+			while(!mbThreadStop){
 				if (!mBSC.isConnect())
 					return CONNECT_LOST; //检查连接是否丢失
 				
-				if (mBSC.getReceiveBufLen() > 0)
+				if (mBSC.getReceiveBufLen() > 0){
+					SystemClock.sleep(10);//接收等待延时，提高接收效率
 					this.publishProgress(mBSC.Receive());
-				SystemClock.sleep(10);//接收等待延时，提高接收效率
+				}
 			}
 			return THREAD_END;
 		}
@@ -943,8 +840,7 @@ public class actKeyBoard extends BaseCommActivity
 		 * 线程内更新处理
 		 */
 		@Override
-		public void onProgressUpdate(String... progress)
-		{
+		public void onProgressUpdate(String... progress){
 			mtvRecView.append(progress[0]); //显示区中追加数据
 			autoScroll(); //自动卷屏处理
 			refreshRxdCount(); //刷新接收数据统计值
@@ -954,8 +850,7 @@ public class actKeyBoard extends BaseCommActivity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			if (CONNECT_LOST == result) //通信连接丢失
 				mtvRecView.append(getString(R.string.msg_msg_bt_connect_lost));
 			else
