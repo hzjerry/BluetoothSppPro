@@ -331,7 +331,6 @@ public abstract class BTSerialComm{
 	private void P(CResourcePV res){
 		while(!res.seizeRes())
 			SystemClock.sleep(2);//资源被占用，延迟检查
-		res.seizeRes(); //夺取一个资源
 	}
 	/**
 	 * 互斥锁V操作：释放资源

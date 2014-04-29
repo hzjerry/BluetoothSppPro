@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import mobi.dzs.android.bluetooth.BluetoothSppClient;
-import mobi.dzs.android.util.DynamicStorage;
+import mobi.dzs.android.storage.CKVStorage;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -59,7 +59,7 @@ public class BaseCommActivity extends BaseActivity
 	/**对象:引用全局的蓝牙连接对象*/
 	protected BluetoothSppClient mBSC = null;
 	/**对象:引用全局的动态存储对象*/
-	protected DynamicStorage mDS = null;
+	protected CKVStorage mDS = null;
 	
 	/**未设限制的AsyncTask线程池(重要)*/
 	protected static ExecutorService FULL_TASK_EXECUTOR;
@@ -76,7 +76,7 @@ public class BaseCommActivity extends BaseActivity
 		this.mBSC = ((globalPool)this.getApplicationContext()).mBSC;
 		this.mDS =  ((globalPool)this.getApplicationContext()).mDS;
 		
-		if (null == this.mBSC && !this.mBSC.isConnect()){	//当进入时，发现连接已丢失，则直接返回主界面
+		if (null == this.mBSC || !this.mBSC.isConnect()){	//当进入时，发现连接已丢失，则直接返回主界面
         	this.setResult(Activity.RESULT_CANCELED); //返回到主界面
         	this.finish();
         	return;
@@ -200,9 +200,9 @@ public class BaseCommActivity extends BaseActivity
             	mbtInputMode = (rbInChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
             	mbtOutputMode = (rbOutChar.isChecked())? BluetoothSppClient.IO_MODE_STRING : BluetoothSppClient.IO_MODE_HEX;
             	//记住当前设置的模式
-            	mDS.setVal(KEY_IO_MODE, "input_mode", mbtInputMode);
-            	mDS.setVal(KEY_IO_MODE, "output_mode", mbtOutputMode);
-            	mDS.saveStorage();
+            	mDS.setVal(KEY_IO_MODE, "input_mode", mbtInputMode)
+            	.setVal(KEY_IO_MODE, "output_mode", mbtOutputMode)
+            	.saveStorage();
             	mBSC.setRxdMode(mbtInputMode);
             	mBSC.setTxdMode(mbtOutputMode);
             }
@@ -216,17 +216,16 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * */
     protected void saveAutoComplateCmdHistory(String sClass){
-    	if(malCmdHistory.isEmpty())
-    		this.mDS.setVal(KEY_HISTORY, sClass, ""); //清除历史日志
+    	if(malCmdHistory.isEmpty())//清除历史日志
+    		this.mDS.setVal(KEY_HISTORY, sClass, "").saveStorage(); 
     	else{	//保存输入提示历史
     		StringBuilder sbBuf = new StringBuilder();
     		String sTmp = null;
     		for(int i=0; i<malCmdHistory.size(); i++)
 	    		sbBuf.append(malCmdHistory.get(i) + HISTORY_SPLIT);
     		sTmp = sbBuf.toString();
-    		this.mDS.setVal(KEY_HISTORY, sClass, sTmp.substring(0, sTmp.length()-3));
+    		this.mDS.setVal(KEY_HISTORY, sClass, sTmp.substring(0, sTmp.length()-3)).saveStorage();
     	}
-    	this.mDS.saveStorage();
     }
     
     /**

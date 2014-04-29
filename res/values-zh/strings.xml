@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Bluetoth spp pro</string>
+	<string name="app_name">Bluetooth spp pro</string>
 	<string name="language">cn</string>	
 	
 	<string name="actMain_name">蓝牙串口助手 Pro</string>

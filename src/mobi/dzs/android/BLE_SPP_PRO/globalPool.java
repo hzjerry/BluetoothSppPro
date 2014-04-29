@@ -1,7 +1,8 @@
 package mobi.dzs.android.BLE_SPP_PRO;
 
 import mobi.dzs.android.bluetooth.BluetoothSppClient;
-import mobi.dzs.android.util.DynamicStorage;
+import mobi.dzs.android.storage.CJsonStorage;
+import mobi.dzs.android.storage.CKVStorage;
 import android.app.Application;
 
 public class globalPool extends Application
@@ -9,14 +10,14 @@ public class globalPool extends Application
 	/**蓝牙SPP通信连接对象*/
 	public BluetoothSppClient mBSC = null;
 	/**动态公共存储对象*/
-	public DynamicStorage mDS = null;
+	public CKVStorage mDS = null;
 	/**
 	 * 覆盖构造
 	 * */
 	@Override
 	public void onCreate(){
 		super.onCreate();
-		this.mDS = new DynamicStorage(this);
+		this.mDS = new CJsonStorage(this, getString(R.string.app_name));
 	}
 	
 	/**

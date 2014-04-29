@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Bluetoth spp pro</string>
+	<string name="app_name">Bluetooth spp pro</string>
 	<string name="language">en</string>	
 	
-	<string name="actMain_name">Bluetoth spp pro</string>
+	<string name="actMain_name">Bluetooth spp pro</string>
 	<string name="actMain_link_device_info_title">Connect the device:</string>
 	<string name="actMain_link_device_service_uuid">Service\'s UUID：</string>
 	<string name="actMain_find_service_uuids">Searching services list&#8230;</string>

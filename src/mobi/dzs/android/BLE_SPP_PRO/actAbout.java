@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class actAbout extends BaseActivity
-{
+public class actAbout extends BaseActivity{
 	private TextView mtvShow = null;
 	/**
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_about);
 		
@@ -31,10 +29,8 @@ public class actAbout extends BaseActivity
 	 * 菜单点击后的执行指令
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {  
+        switch(item.getItemId()) {
 	        case android.R.id.home:
 	        	this.setResult(Activity.RESULT_CANCELED); //返回到主界面
 	        	this.finish();

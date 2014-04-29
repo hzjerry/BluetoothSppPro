@@ -35,8 +35,7 @@ import android.content.IntentFilter;
  * @author JerryLi
  *
  */
-public class actMain extends Activity
-{
+public class actMain extends Activity{
 	/**CONST: scan device menu id*/
 	public static final byte MEMU_RESCAN = 0x01;
 	/**CONST: exit application*/
@@ -80,15 +79,12 @@ public class actMain extends Activity
 	/**保存蓝牙进入前的开启状态*/
 	private boolean mbBleStatusBefore = false;
 	/**广播监听:获取UUID服务*/
-	private BroadcastReceiver _mGetUuidServiceReceiver = new BroadcastReceiver()
-	{
+	private BroadcastReceiver _mGetUuidServiceReceiver = new BroadcastReceiver(){
 		@Override
-		public void onReceive(Context arg0, Intent intent)
-		{
+		public void onReceive(Context arg0, Intent intent){
 			String action = intent.getAction();
 			int iLoop = 0;
-			if (BluetoothDevice.ACTION_UUID.equals(action))
-			{
+			if (BluetoothDevice.ACTION_UUID.equals(action)){
 				Parcelable[] uuidExtra = 
 					intent.getParcelableArrayExtra("android.bluetooth.device.extra.UUID");
 				if (null != uuidExtra)
@@ -100,14 +96,11 @@ public class actMain extends Activity
 		}
 	};
 	/** 广播监听:蓝牙配对处理 */
-	private BroadcastReceiver _mPairingRequest = new BroadcastReceiver()
-	{
+	private BroadcastReceiver _mPairingRequest = new BroadcastReceiver(){
 		@Override
-		public void onReceive(Context context, Intent intent)
-		{
+		public void onReceive(Context context, Intent intent){
 			BluetoothDevice device = null;
-			if (intent.getAction().equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED))
-			{	//配对状态改变时，的广播处理
+			if (intent.getAction().equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)){	//配对状态改变时，的广播处理
 				device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				if (device.getBondState() == BluetoothDevice.BOND_BONDED)
 					mbBonded = true;//蓝牙配对设置成功
@@ -129,8 +122,7 @@ public class actMain extends Activity
 	 * add top menu
 	 * */
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         //扫描设备
         MenuItem miScan = menu.add(0, MEMU_RESCAN, 0, getString(R.string.actMain_menu_rescan));
@@ -148,10 +140,8 @@ public class actMain extends Activity
 	 * 菜单点击后的执行指令
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {  
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {  
+        switch(item.getItemId()) {  
 	        case MEMU_RESCAN: //开始扫描
 	        	this.mGP.closeConn();//关闭连接
 	        	this.initActivityView(); //进入扫描时，显示界面初始化
@@ -216,7 +206,7 @@ public class actMain extends Activity
 		this.mGP.closeConn();//关闭连接
 		
 		//检查如果进入前蓝牙是关闭的状态，则退出时关闭蓝牙
-		if (!this.mbBleStatusBefore)
+		if (null != mBT && !this.mbBleStatusBefore)
 			mBT.disable();
 	}
 
@@ -370,7 +360,6 @@ public class actMain extends Activity
     	private static final int RET_BULETOOTH_IS_START = 0x0001;
     	/**常量:设备启动失败*/
     	private static final int RET_BLUETOOTH_START_FAIL = 0x04;
-    	
     	/**等待蓝牙设备启动的最长时间(单位S)*/
     	private static final int miWATI_TIME = 15;
     	/**每次线程休眠时间(单位ms)*/

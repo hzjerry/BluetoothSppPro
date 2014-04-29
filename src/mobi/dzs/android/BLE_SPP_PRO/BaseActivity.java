@@ -14,8 +14,7 @@ import android.app.Activity;
 import android.os.Environment;
 import android.widget.Toast;
 
-public class BaseActivity extends Activity
-{
+public class BaseActivity extends Activity{
 	/**
 	 * 激活Action Bar的回退按钮
 	 * @return void

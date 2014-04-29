@@ -270,9 +270,11 @@ public class actByteStream extends BaseCommActivity{
 		 */
 		@Override
 		public void onProgressUpdate(String... progress){
-			mtvReceive.append(progress[0]); //显示区中追加数据
-			autoScroll(); //自动卷屏处理
-			refreshRxdCount(); //刷新接收数据统计值
+			if (null != progress[0]){
+				mtvReceive.append(progress[0]); //显示区中追加数据
+				autoScroll(); //自动卷屏处理
+				refreshRxdCount(); //刷新接收数据统计值
+			}
 		}
 		
 		/**

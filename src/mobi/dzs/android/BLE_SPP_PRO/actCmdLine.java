@@ -25,8 +25,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-public class actCmdLine extends BaseCommActivity
-{
+public class actCmdLine extends BaseCommActivity{
 	/**常量:类型标识-接收*/
 	private final static byte TYPE_RXD = 0x01;
 	/**常量:类型标识-发送*/
@@ -50,8 +49,7 @@ public class actCmdLine extends BaseCommActivity
 	 * 页面构造
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_cmd_line);
 		
@@ -61,11 +59,9 @@ public class actCmdLine extends BaseCommActivity
 		this.msvCtl = (ScrollView)this.findViewById(R.id.actCmdLine_sv_Scroll);
 		
 		/*监听输入框的按钮事件*/
-		this.mactvInput.setOnEditorActionListener(new OnEditorActionListener()
-		{
+		this.mactvInput.setOnEditorActionListener(new OnEditorActionListener(){
 			@Override
-			public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2)
-			{
+			public boolean onEditorAction(TextView arg0, int arg1, KeyEvent arg2){
 				/*当点击发送按钮时发送指令*/
 				if (EditorInfo.IME_ACTION_SEND == arg1 ||
 					EditorInfo.IME_ACTION_DONE == arg1 ||
@@ -73,16 +69,12 @@ public class actCmdLine extends BaseCommActivity
 					)
 				{
 					String sCmd = mactvInput.getText().toString().trim();
-					if (sCmd.length() > 0)
-					{
+					if (sCmd.length() > 0){
 						mactvInput.setText(""); //清除输入框
-				    	if (mBSC.Send(sCmd.concat(msEndFlg)) >= 0)
-				    	{
+				    	if (mBSC.Send(sCmd.concat(msEndFlg)) >= 0){
 				    		append2DataView(TYPE_TXD, sCmd); //显示数据
 				    		addAutoComplateVal(sCmd, mactvInput); //追加自动完成值
-				    	}
-				    	else
-				    	{
+				    	}else{
 							Toast.makeText(actCmdLine.this, //提示 连接丢失
 							   getString(R.string.msg_msg_bt_connect_lost),
 							   Toast.LENGTH_LONG).show();
@@ -92,8 +84,7 @@ public class actCmdLine extends BaseCommActivity
 				    	refreshTxdCount(); //刷新接收数据统计值
 					}
 					return true;
-				}
-				else
+				}else
 					return false;
 			}
 		});
@@ -115,8 +106,7 @@ public class actCmdLine extends BaseCommActivity
 	 * 析构
 	 * */
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy(){
     	super.onDestroy();
     	this.mBSC.killReceiveData_StopFlg(); //强制终止接收函数
     	this.saveAutoComplateCmdHistory(this.getLocalClassName()); //保存用于自动完成控件的命令历史字
@@ -126,8 +116,7 @@ public class actCmdLine extends BaseCommActivity
 	 * 屏幕旋转时的处理
 	 * */
 	@Override
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig){
 		super.onConfigurationChanged(newConfig);
 		this.mactvInput.setInputType(InputType.TYPE_NULL); //旋转时关闭软键盘
 	}
@@ -136,8 +125,7 @@ public class actCmdLine extends BaseCommActivity
 	 * add top menu
 	 * */
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         //清屏
         MenuItem miClear = menu.add(0, MEMU_CLEAR, 0, getString(R.string.menu_clear));
@@ -161,10 +149,8 @@ public class actCmdLine extends BaseCommActivity
 	 * 菜单点击后的执行指令
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {
+    public boolean onMenuItemSelected(int featureId, MenuItem item){  
+        switch(item.getItemId()){
 	        case android.R.id.home:
 	            // app icon in action bar clicked; go home
 	        	this.mBSC.killReceiveData_StopFlg(); //强制终止接收函数
@@ -202,16 +188,13 @@ public class actCmdLine extends BaseCommActivity
      * @param data
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (KeyEvent.KEYCODE_BACK == keyCode)
-        {	//按回退键的处理
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (KeyEvent.KEYCODE_BACK == keyCode){	//按回退键的处理
         	this.mbThreadStop = true; //终止接收线程
         	this.setResult(Activity.RESULT_CANCELED, null);
         	this.finish();
         	return true;
-        }
-        else
+        }else
         	return super.onKeyDown(keyCode, event);
     }
 	
@@ -219,8 +202,7 @@ public class actCmdLine extends BaseCommActivity
 	 * 界面的控件初始化
 	 * @return void
 	 * */
-	private void initCtl()
-	{
+	private void initCtl(){
 		this.refreshRxdCount();
 		this.refreshTxdCount();
 	}
@@ -229,8 +211,7 @@ public class actCmdLine extends BaseCommActivity
      * 保存收到的数据到SD卡文件中
      * @return void
      * */
-    private void saveData2File()
-    {
+    private void saveData2File(){
     	if (this.mtvDataView.length() > 0)
     		this.save2SD(this.mtvDataView.getText().toString().trim());
     }
@@ -241,8 +222,7 @@ public class actCmdLine extends BaseCommActivity
 	 * @param String sData 需要显示的数据
 	 * @return void
 	 * */
-	private void append2DataView(byte b, String sData)
-	{
+	private void append2DataView(byte b, String sData){
 		StringBuilder sbTmp = new StringBuilder();
 		if (TYPE_RXD == b)
 			sbTmp.append("Rxd>");
@@ -261,8 +241,7 @@ public class actCmdLine extends BaseCommActivity
      * @param byte bMode 字符显示模式 IO_MODE_HEX / IO_MODE_STRING
      * @return void
      * */
-	private void selectEndFlg()
-    {
+	private void selectEndFlg(){
 		final AlertDialog adCtrl;
     	final RadioGroup rgEndFlg;
     	final RadioButton rb_rn, rb_n, rb_other;
@@ -279,32 +258,23 @@ public class actCmdLine extends BaseCommActivity
     	etVal =(EditText)view.findViewById(R.id.et_end_flg_val);
 
     	builder.setView(view);//绑定布局
-    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener()
-    	{
+    	builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener(){
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which){
             	//设置输入输出的模式
             	String sHexEndFlg = etVal.getText().toString().trim();
-            	if (sHexEndFlg.isEmpty())
-            	{
+            	if (sHexEndFlg.isEmpty()){
 	            	msEndFlg = new String();
 	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
-	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
-	            	mDS.saveStorage();
+	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg).saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
-            	}
-            	else if (CHexConver.checkHexStr(sHexEndFlg))
-            	{
+            	}else if (CHexConver.checkHexStr(sHexEndFlg)){
 	            	msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
 	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
-	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
-	            	mDS.saveStorage();
+	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg).saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
-            	}
-            	else
-            	{
+            	}else{
 					Toast.makeText(actCmdLine.this,
 						   getString(R.string.msg_not_hex_string),
 						   Toast.LENGTH_SHORT).show();
@@ -324,40 +294,29 @@ public class actCmdLine extends BaseCommActivity
     		rb_other.setChecked(true);
     	
     	/*设置按钮组的监听事件*/
-    	rgEndFlg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-    	{
+    	rgEndFlg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 			@Override
-			public void onCheckedChanged(RadioGroup arg0, int arg1)
-			{
-				if (rb_rn.getId() == arg1)
-				{
+			public void onCheckedChanged(RadioGroup arg0, int arg1){
+				if (rb_rn.getId() == arg1){
 					msEndFlg = msEND_FLGS[0];
 					etVal.setEnabled(false); //不可修改
-				}
-				else if (rb_n.getId() == arg1)
-				{
+				}else if (rb_n.getId() == arg1){
 					msEndFlg = msEND_FLGS[1];
 					etVal.setEnabled(false); //不可修改
-				}
-				else
+				}else
 					etVal.setEnabled(true); //可修改
 				etVal.setText(CHexConver.str2HexStr(msEndFlg));//输出HEX字符串
 			}
     	});
     	/*结束符的输入框的监听*/
-    	etVal.addTextChangedListener(new TextWatcher()
-    	{
+    	etVal.addTextChangedListener(new TextWatcher(){
 			@Override
-			public void afterTextChanged(Editable arg0)
-			{
+			public void afterTextChanged(Editable arg0){
 				String sEndFlg = etVal.getText().toString().trim();
-				if (sEndFlg.isEmpty() || CHexConver.checkHexStr(sEndFlg))
-				{
+				if (sEndFlg.isEmpty() || CHexConver.checkHexStr(sEndFlg)){
 					etVal.setTextColor(android.graphics.Color.BLACK);
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-				}
-				else
-				{
+				}else{
 					adCtrl.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 					etVal.setTextColor(android.graphics.Color.RED);
 				}
@@ -380,16 +339,15 @@ public class actCmdLine extends BaseCommActivity
      * @param String sModelName 模块名称
      * @return void
      * */
-    private void loadProfile()
-    {
+    private void loadProfile(){
     	String sHexEndFlg = this.mDS.getStringVal(this.getLocalClassName(), SUB_KEY_END_FLG);
     	//首次使用判断，默认第一次使用为false，取反则为true
     	boolean bModuleIsUsed = this.mDS.getBooleanVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED);
-    	if (!bModuleIsUsed) //首次使用默认认为(\r\n)
-    	{
+    	if (!bModuleIsUsed){ //首次使用默认认为(\r\n)
     		this.msEndFlg = msEND_FLGS[0];
-    		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true); //标记已经使用过
-    		this.mDS.saveStorage();
+    		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true) //标记已经使用过
+    		.setVal(getLocalClassName(), SUB_KEY_END_FLG, CHexConver.str2HexStr(msEndFlg))//保存首次使用的终止符
+    		.saveStorage();
     	}
     	else if (sHexEndFlg.isEmpty())
     		this.msEndFlg = ""; //未设置结束符
@@ -403,29 +361,22 @@ public class actCmdLine extends BaseCommActivity
      * 显示当前结束符的设置信息
      * @return void
      * */
-    private void showEndFlg()
-    {
-    	if(msEndFlg.equals(msEND_FLGS[0]))
-    	{
+    private void showEndFlg(){
+    	if(msEndFlg.equals(msEND_FLGS[0])){
     		this.mtvDataView.setText(
     				String.format(
     						this.getString(R.string.actCmdLine_msg_helper), 
     						this.getString(R.string.dialog_end_flg_rn)));
-    	}
-    	else if(msEndFlg.equals(msEND_FLGS[1]))
-    	{
+    	}else if(msEndFlg.equals(msEND_FLGS[1])){
     		this.mtvDataView.setText(
     				String.format(
     						this.getString(R.string.actCmdLine_msg_helper), 
     						this.getString(R.string.dialog_end_flg_n)));
-    	}
-    	else
-    	{
+    	}else{
     		String sTmp = null;
     		if(msEndFlg.isEmpty())
     			sTmp = getString(R.string.msg_helper_endflg_nothing);
-    		else
-    		{
+    		else{
     			sTmp = String.format(getString(R.string.actCmdLine_msg_helper), 
     					"("+ CHexConver.str2HexStr(msEndFlg) +")");
     		}
@@ -437,8 +388,7 @@ public class actCmdLine extends BaseCommActivity
      * 自动滚屏的处理
      * @return void
      * */
-    private void autoScroll()
-    {
+    private void autoScroll(){
 		//自动滚屏处理
 		int iOffset = this.mtvDataView.getMeasuredHeight() - this.msvCtl.getHeight();     
         if (iOffset > 0)
@@ -447,8 +397,7 @@ public class actCmdLine extends BaseCommActivity
     
     //----------------
     /*多线程处理(接收数据线程)*/
-    private class receiveTask extends AsyncTask<String, String, Integer>
-    {
+    private class receiveTask extends AsyncTask<String, String, Integer>{
     	/**常量:连接丢失*/
     	private final static byte CONNECT_LOST = 0x01;
     	/**常量:线程任务结束*/
@@ -457,8 +406,7 @@ public class actCmdLine extends BaseCommActivity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 			mtvDataView.append(getString(R.string.msg_receive_data_wating));
 			mtvDataView.append("\n");
 			mbThreadStop = false;
@@ -468,14 +416,11 @@ public class actCmdLine extends BaseCommActivity
 		  * 线程异步处理
 		  */
 		@Override
-		protected Integer doInBackground(String... arg0)
-		{
+		protected Integer doInBackground(String... arg0){
 			mBSC.Receive(); //首次启动调用一次以启动接收线程
-			while(!mbThreadStop)
-			{
+			while(!mbThreadStop){
 				if (!mBSC.isConnect())
 					return (int)CONNECT_LOST; //检查连接是否丢失
-				
 				this.publishProgress(mBSC.ReceiveStopFlg());
 			}
 			return (int)THREAD_END;
@@ -485,10 +430,8 @@ public class actCmdLine extends BaseCommActivity
 		 * 线程内更新处理
 		 */
 		@Override
-		public void onProgressUpdate(String... progress)
-		{
-			if (null != progress[0])
-			{	//输入不为空时，刷新列表
+		public void onProgressUpdate(String... progress){
+			if (null != progress[0]){	//输入不为空时，刷新列表
 				append2DataView(TYPE_RXD, progress[0]); //显示区中追加数据
 				autoScroll(); //自动卷屏处理
 				refreshRxdCount(); //刷新接收数据统计值
@@ -499,8 +442,7 @@ public class actCmdLine extends BaseCommActivity
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			if (CONNECT_LOST == result) //通信连接丢失
 				mtvDataView.append(getString(R.string.msg_msg_bt_connect_lost));
 			else

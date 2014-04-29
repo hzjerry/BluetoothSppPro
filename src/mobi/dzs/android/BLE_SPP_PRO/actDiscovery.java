@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,8 +29,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class actDiscovery extends Activity
-{
+public class actDiscovery extends Activity{
 	/**CONST: scan device menu id*/
 	public static final int MEMU_SCAN = 1;
 	/**CONST: quit system*/
@@ -64,10 +64,8 @@ public class actDiscovery extends Activity
 	/**
 	 * Scan for Bluetooth devices. (broadcast listener)
 	 */
-	private BroadcastReceiver _foundReceiver = new BroadcastReceiver()
-	{
-		public void onReceive(Context context, Intent intent)
-		{
+	private BroadcastReceiver _foundReceiver = new BroadcastReceiver(){
+		public void onReceive(Context context, Intent intent){
 			/* bluetooth device profiles*/
 			Hashtable<String, String> htDeviceInfo = new Hashtable<String, String>();
 			
@@ -106,24 +104,19 @@ public class actDiscovery extends Activity
 	 * Bluetooth scanning is finished processing.(broadcast listener)
 	 */
 	private BroadcastReceiver _finshedReceiver = new BroadcastReceiver(){
-
 		@Override
-		public void onReceive(Context context, Intent intent)
-		{
+		public void onReceive(Context context, Intent intent){
 			Log.d(getString(R.string.app_name), ">>Bluetooth scanning is finished");
 			_discoveryFinished = true; //set scan is finished
 			unregisterReceiver(_foundReceiver);
 			unregisterReceiver(_finshedReceiver);
 			
 			/* 提示用户选择需要连接的蓝牙设备 */
-			if (null != mhtFDS && mhtFDS.size()>0)
-			{	//找到蓝牙设备
+			if (null != mhtFDS && mhtFDS.size()>0){	//找到蓝牙设备
 				Toast.makeText(actDiscovery.this, 
 							   getString(R.string.actDiscovery_msg_select_device),
 							   Toast.LENGTH_SHORT).show();
-			}
-			else
-			{	//未找到蓝牙设备
+			}else{	//未找到蓝牙设备
 				Toast.makeText(actDiscovery.this, 
 						   getString(R.string.actDiscovery_msg_not_find_device),
 						   Toast.LENGTH_LONG).show();
@@ -135,19 +128,16 @@ public class actDiscovery extends Activity
 	 * start run
 	 * */
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_discovery);
 		
 		this.mlvList = (ListView)this.findViewById(R.id.actDiscovery_lv);
 		
     	/* 选择项目后返回给调用页面 */
-    	this.mlvList.setOnItemClickListener(new OnItemClickListener()
-    	{  
+    	this.mlvList.setOnItemClickListener(new OnItemClickListener(){  
             @Override  
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-            {  
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){  
                 String sMAC = ((TextView)arg1.findViewById(R.id.device_item_ble_mac)).getText().toString();
         		Intent result = new Intent();
         		result.putExtra("MAC", sMAC);
@@ -160,7 +150,6 @@ public class actDiscovery extends Activity
         		finish();
             }  
         });
-    	
     	//立即启动扫描线程
 		new scanDeviceTask().execute("");
 	}
@@ -169,8 +158,7 @@ public class actDiscovery extends Activity
 	 * add top menu
 	 * */
 	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
         MenuItem miScan = menu.add(0, MEMU_SCAN, 0, getString(R.string.actDiscovery_menu_scan));
         MenuItem miClose = menu.add(0, MEMU_QUIT, 1, getString(R.string.menu_close));
@@ -183,10 +171,8 @@ public class actDiscovery extends Activity
 	 * 菜单点击后的执行指令
 	 * */
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) 
-    {  
-        switch(item.getItemId())  
-        {  
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {  
+        switch(item.getItemId()){  
 	        case MEMU_SCAN: //开始扫描
 	        	new scanDeviceTask().execute("");
 	        	return true;
@@ -204,8 +190,7 @@ public class actDiscovery extends Activity
 	 *   退出时，强制终止搜索
 	 * */
 	@Override
-	protected void onDestroy() 
-	{
+	protected void onDestroy(){
 		super.onDestroy();
 		
 		if (mBT.isDiscovering())
@@ -217,8 +202,7 @@ public class actDiscovery extends Activity
 	 *  备注:进入这步前必须保证蓝牙设备已经被启动
 	 *  @return void
 	 * */
-	private void startSearch()
-	{
+	private void startSearch(){
 		_discoveryFinished = false; //标记搜索未结束
 		
 		//如果找到的设别对象为空，则创建这个对象。
@@ -241,13 +225,10 @@ public class actDiscovery extends Activity
 	 * 将设备类型ID，转换成设备解释字符串
 	 * @return String
 	 * */
-	private String toDeviceTypeString(String sDeviceTypeId)
-	{
+	private String toDeviceTypeString(String sDeviceTypeId){
 		Pattern pt = Pattern.compile("^[-\\+]?[\\d]+$");
-		if (pt.matcher(sDeviceTypeId).matches())
-		{
-	        switch(Integer.valueOf(sDeviceTypeId))
-	        {
+		if (pt.matcher(sDeviceTypeId).matches()){
+	        switch(Integer.valueOf(sDeviceTypeId)){
 	        	case DEVICE_TYPE_BREDR:
 	        		return getString(R.string.device_type_bredr);
 	        	case DEVICE_TYPE_BLE:
@@ -263,14 +244,12 @@ public class actDiscovery extends Activity
 	}
 
 	/* Show devices list */
-	protected void showDevices()
-	{
+	protected void showDevices(){
 		if (null == this.malListItem) //数组容器不存在时，创建
 			this.malListItem = new ArrayList<HashMap<String, Object>>();
 		
 		//如果列表适配器未创建则创建之
-        if (null == this.msaListItemAdapter)
-        {
+        if (null == this.msaListItemAdapter){
 	        //生成适配器的Item和动态数组对应的元素  
 	        this.msaListItemAdapter = new SimpleAdapter(this,malListItem,//数据源   
 	            R.layout.list_view_item_devices,//ListItem的XML实现  
@@ -293,8 +272,7 @@ public class actDiscovery extends Activity
         this.malListItem.clear();//清除历史项
         Enumeration<String> e = this.mhtFDS.keys();
         /*重新构造数据*/
-        while (e.hasMoreElements())
-        {
+        while (e.hasMoreElements()){
             HashMap<String, Object> map = new HashMap<String, Object>();
             String sKey = e.nextElement();
             map.put("MAC", sKey);
@@ -310,8 +288,7 @@ public class actDiscovery extends Activity
     
     //----------------
     /*多线程处理:设备扫描监管线程*/
-    private class scanDeviceTask extends AsyncTask<String, String, Integer>
-    {
+    private class scanDeviceTask extends AsyncTask<String, String, Integer>{
     	/**常量:蓝牙未开启*/
     	private static final int RET_BLUETOOTH_NOT_START = 0x0001;
     	/**常量:设备搜索完成*/
@@ -327,18 +304,15 @@ public class actDiscovery extends Activity
 		 * 线程启动初始化操作
 		 */
 		@Override
-		public void onPreExecute()
-		{
+		public void onPreExecute(){
 	    	/*定义进程对话框*/
 			this.mpd = new ProgressDialog(actDiscovery.this);
 			this.mpd.setMessage(getString(R.string.actDiscovery_msg_scaning_device));
 			this.mpd.setCancelable(true);//可被终止
 			this.mpd.setCanceledOnTouchOutside(true);//点击外部可终止
-			this.mpd.setOnCancelListener(new DialogInterface.OnCancelListener()
-			{
+			this.mpd.setOnCancelListener(new DialogInterface.OnCancelListener(){
 				@Override
-				public void onCancel(DialogInterface dialog)
-				{	//按下取消按钮后，终止搜索等待线程
+				public void onCancel(DialogInterface dialog){	//按下取消按钮后，终止搜索等待线程
 					_discoveryFinished = true;
 				}
 			});
@@ -348,57 +322,41 @@ public class actDiscovery extends Activity
 		}
 		
 		@Override
-		protected Integer doInBackground(String... params)
-		{
+		protected Integer doInBackground(String... params){
 			if (!mBT.isEnabled()) //蓝牙未启动
 				return RET_BLUETOOTH_NOT_START;
 			
 			int iWait = miWATI_TIME * 1000;//倒减计数器
 			//等待miSLEEP_TIME秒，启动蓝牙设备后再开始扫描
-			while(iWait > 0)
-			{
+			while(iWait > 0){
 				if (_discoveryFinished)
 					return RET_SCAN_DEVICE_FINISHED; //蓝牙搜索结束
 				else
 					iWait -= miSLEEP_TIME; //剩余等待时间计时
-				try
-				{
-					Thread.sleep(miSLEEP_TIME);
-				}
-				catch (InterruptedException e)
-				{
-				}
+				SystemClock.sleep(miSLEEP_TIME);;
 			}
 			return RET_SCAN_DEVICE_FINISHED; //在规定时间内，蓝牙设备未启动
 		}
-
 		/**
 		 * 线程内更新处理
 		 */
 		@Override
-		public void onProgressUpdate(String... progress)
-		{
+		public void onProgressUpdate(String... progress){
 		}
-    	
 		/**
 		  * 阻塞任务执行完后的清理工作
 		  */
 		@Override
-		public void onPostExecute(Integer result)
-		{
+		public void onPostExecute(Integer result){
 			if (this.mpd.isShowing())
 				this.mpd.dismiss();//关闭等待对话框
-			
 			
 			if (mBT.isDiscovering())
 				mBT.cancelDiscovery();
 			
-			if (RET_SCAN_DEVICE_FINISHED == result)
-			{	
-				//蓝牙设备搜索结束
-			}
-			else if (RET_BLUETOOTH_NOT_START == result)
-			{	//提示蓝牙未启动
+			if (RET_SCAN_DEVICE_FINISHED == result){//蓝牙设备搜索结束
+				
+			}else if (RET_BLUETOOTH_NOT_START == result){	//提示蓝牙未启动
 				Toast.makeText(actDiscovery.this, getString(R.string.actDiscovery_msg_bluetooth_not_start), 
 	 					   Toast.LENGTH_SHORT).show();
 			}

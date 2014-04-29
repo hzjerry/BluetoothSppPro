@@ -348,15 +348,13 @@ public class actKeyBoard extends BaseCommActivity{
             	if (sHexEndFlg.isEmpty()){	//未设置终止符
             		msEndFlg = new String();
             		mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
-	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
-	            	mDS.saveStorage();
+	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg).saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
             	}else if (CHexConver.checkHexStr(sHexEndFlg)){
 	            	msEndFlg = CHexConver.hexStr2Str(sHexEndFlg);
 	            	mBSC.setReceiveStopFlg(msEndFlg); //设置结束符
 	            	//记住当前设置的模式
-	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg);
-	            	mDS.saveStorage();
+	            	mDS.setVal(getLocalClassName(), SUB_KEY_END_FLG, sHexEndFlg).saveStorage();
 	            	showEndFlg(); //显示当前结束符的设置信息
             	}else{
 					Toast.makeText(actKeyBoard.this, //提示 连接丢失
@@ -503,8 +501,7 @@ public class actKeyBoard extends BaseCommActivity{
     			this.mbtns[i].bindListener(500, mCRL);
     	}
     	//保存设置
-    	this.mDS.setVal(this.getLocalClassName(), SUB_KEY_BTN_EVENT, btFlg);
-    	this.mDS.saveStorage();
+    	this.mDS.setVal(this.getLocalClassName(), SUB_KEY_BTN_EVENT, btFlg).saveStorage();
     }
     
     /**
@@ -516,8 +513,7 @@ public class actKeyBoard extends BaseCommActivity{
     	this.miRepateFreq = interval;
 		for (int i=0; i<miBTN_CNT; i++)
 			this.mbtns[i].setRepeatFreq(interval);
-		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_BTN_REPEAT_FREQ, interval);
-		this.mDS.saveStorage();
+		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_BTN_REPEAT_FREQ, interval).saveStorage();
     }
     
     /**按钮激发模式选择*/
@@ -562,10 +558,10 @@ public class actKeyBoard extends BaseCommActivity{
     	//首次使用判断，默认第一次使用为false，取反则为true
     	boolean bModuleIsUsed = this.mDS.getBooleanVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED);
     	if (!bModuleIsUsed){ //首次使用默认认为(\r\n)
-    	
     		this.msEndFlg = msEND_FLGS[0];
-    		this.mDS.setVal(this.getLocalClassName(), SUB_KEY_MODULE_IS_USED, true); //标记已经使用过
-    		this.mDS.saveStorage();
+    		this.mDS.setVal(getLocalClassName(), SUB_KEY_MODULE_IS_USED, true) //标记已经使用过
+    		.setVal(getLocalClassName(), SUB_KEY_END_FLG, CHexConver.str2HexStr(msEndFlg))//保存首次使用的终止符
+    		.saveStorage();
     	}else if (sHexEndFlg.isEmpty())
     		this.msEndFlg = ""; //未设置结束符
     	else
@@ -679,9 +675,9 @@ public class actKeyBoard extends BaseCommActivity{
     	    	mhtSendVal.remove(iId);//移除原始项目
     	    	mhtSendVal.put(iId, sBtnVal);//添加按钮的新值
     	    	/*保存新的按钮值*/
-    	    	mDS.setVal(sModel, SUB_KEY_BTN_NAME + String.valueOf(iId), sBtnName);
-    	    	mDS.setVal(sModel, SUB_KEY_BTN_VAL + String.valueOf(iId), sBtnVal);
-    	    	mDS.saveStorage();
+    	    	mDS.setVal(sModel, SUB_KEY_BTN_NAME + String.valueOf(iId), sBtnName)
+    	    	.setVal(sModel, SUB_KEY_BTN_VAL + String.valueOf(iId), sBtnVal)
+    	    	.saveStorage();
     	    }
     	});
     	adCtrl = builder.create();

@@ -5,7 +5,7 @@ Software features:
      1. Search for Bluetooth devices, and displays the class and RSSI (signal strength);
      2. The use of serial communication, receiving and sending data;
      3. Can be set to ASCII and HEX input and output mode;
-     4. The data results can be saved to the SD card(/sdcard/BLE_SPP_PRO/...).
+     4. The data results can be saved to the SD card(/sdcard/Bluetooth spp pro/...).
      5. Can search for Bluetooth low energy devices (nothing more)
      
 This tool three modules:
@@ -19,8 +19,7 @@ This can only connect Bluetooth serial module devices, Bluetooth devices are gen
 
 System using the Bluetooth pairing means: [menu-> Settings -> Wireless and Network -> Bluetooth Settings], open the Bluetooth feature, and to search for Bluetooth devices to pair, paired with a device only once.
 
-Bluetooth server settings (ie: Bluetooth host):
-If you use this tool to communicate with the MCU, set the single-chip Bluetooth communications parameters configured for 9600, N, 8,1 (you know).
+System Configuration (includes keyboard mode button settings) file can be found in the SD card Bluetooth spp pro directory. You can back up the configuration file, or copy the configuration file to another terminal equipment, covering his profile to complete recovery. 
 
 Special cases:
 Non-normal end of the Bluetooth function, may lead to not be able to connect Bluetooth devices such as this is the case, please restart the phone can often return to normal.
