@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import mobi.dzs.android.bluetooth.BluetoothSppClient;
+import mobi.dzs.android.storage.CJsonStorage;
 import mobi.dzs.android.storage.CKVStorage;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -216,16 +217,18 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * */
     protected void saveAutoComplateCmdHistory(String sClass){
+    	CKVStorage kvAutoComplate = new CJsonStorage(this, getString(R.string.app_name), "AutoComplateList");
     	if(malCmdHistory.isEmpty())//清除历史日志
-    		this.mDS.setVal(KEY_HISTORY, sClass, "").saveStorage(); 
+    		kvAutoComplate.setVal(KEY_HISTORY, sClass, "").saveStorage(); 
     	else{	//保存输入提示历史
     		StringBuilder sbBuf = new StringBuilder();
     		String sTmp = null;
     		for(int i=0; i<malCmdHistory.size(); i++)
 	    		sbBuf.append(malCmdHistory.get(i) + HISTORY_SPLIT);
     		sTmp = sbBuf.toString();
-    		this.mDS.setVal(KEY_HISTORY, sClass, sTmp.substring(0, sTmp.length()-3)).saveStorage();
+    		kvAutoComplate.setVal(KEY_HISTORY, sClass, sTmp.substring(0, sTmp.length()-3)).saveStorage();
     	}
+    	kvAutoComplate = null;
     }
     
     /**
@@ -235,7 +238,9 @@ public class BaseCommActivity extends BaseActivity
      * @return void
      * */
     protected void loadAutoComplateCmdHistory(String sClass, AutoCompleteTextView v){
-    	String sTmp = this.mDS.getStringVal(KEY_HISTORY, sClass);
+    	CKVStorage kvAutoComplate = new CJsonStorage(this, getString(R.string.app_name), "AutoComplateList");
+    	String sTmp = kvAutoComplate.getStringVal(KEY_HISTORY, sClass);
+    	kvAutoComplate = null;
     	if(!sTmp.equals("")){	//保存输入提示历史
     		String[] sT = sTmp.split(HISTORY_SPLIT);
     		for (int i=0;i<sT.length; i++)

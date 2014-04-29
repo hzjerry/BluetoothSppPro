@@ -27,7 +27,7 @@ public class BaseActivity extends Activity{
 	
 	/**
 	 * 保存数据到SD卡
-	 * @param String sData 待保存的数据
+	 * @param sData String 待保存的数据
 	 * @return void
 	 * */
 	protected void save2SD(String sData){
@@ -39,7 +39,7 @@ public class BaseActivity extends Activity{
 			sRoot = Environment.getExternalStorageDirectory().toString();//获取跟目录
 		else
 			return;
-		
+
 		//生成文件名
 		sFileName = (new SimpleDateFormat("MMddHHmmss", Locale.getDefault())).format(new Date()) + ".txt";
 		//生成最终的保存路径

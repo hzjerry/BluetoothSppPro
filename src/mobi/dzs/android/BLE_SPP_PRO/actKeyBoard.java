@@ -421,19 +421,19 @@ public class actKeyBoard extends BaseCommActivity{
      * @return void
      * */
     private void saveData2File(){
-    	StringBuilder sb = new StringBuilder();
-    	if (this.mtvRecView.length() > 0){
-    		sb.append("Receive Data:\n");
-    		sb.append("--------------------------\n");
-    		sb.append(this.mtvRecView.getText().toString().trim());
-    		sb.append("\n\n");
-    	}
-    	if (this.mtvRecView.length() > 0){
-    		sb.append("Send Data:\n");
-    		sb.append("--------------------------\n");
-    		sb.append(this.mtvSendView.getText().toString().trim());
-    	}
-    	this.save2SD(sb.toString());
+//    	StringBuilder sb = new StringBuilder();
+//    	if (this.mtvRecView.length() > 0){
+//    		sb.append("Receive Data:\n");
+//    		sb.append("--------------------------\n");
+//    		sb.append(this.mtvRecView.getText().toString().trim());
+//    		sb.append("\n\n");
+//    	}
+//    	if (this.mtvRecView.length() > 0){
+//    		sb.append("Send Data:\n");
+//    		sb.append("--------------------------\n");
+//    		sb.append(this.mtvSendView.getText().toString().trim());
+//    	}
+    	this.save2SD(this.mtvRecView.getText().toString().trim());
     }
 	
 	/**
