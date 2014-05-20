@@ -16,7 +16,7 @@ import android.os.SystemClock;
 
 /**
  * 蓝牙串口通信类
- * @version 1.0 2013-03-21
+ * @version 1.1 2014-05-07
  * @author JerryLi (lijian@dzs.mobi)
  * @see 抽象类，不要对其直接实例化。SendData()需要继承后再定义对外公开方法。<br />
  * 使用本类，需要有以下两个权限<br />
@@ -273,6 +273,7 @@ public abstract class BTSerialComm{
 	 * */
 	final protected byte[] ReceiveData_StopFlg(byte[] btStopFlg){
 		int iStopCharLen = btStopFlg.length; //终止字符的长度
+		int iReceiveLen = 0; //临时变量，保存接收缓存中数据的长度
 		byte[] btCmp = new byte[iStopCharLen];
 		byte[] btBufs = null; //临时输出缓存
 
@@ -286,14 +287,23 @@ public abstract class BTSerialComm{
 					new ReceiveThread().execute("");
 				SystemClock.sleep(50);//延迟，给线程启动的时间
 			}
-
-			while((this.miBufDataSite - iStopCharLen) <= 0)
-				SystemClock.sleep(50);//死循环，等待数据回复
+			
+			while(true){
+				this.P(this.mresReceiveBuf);//夺取缓存访问权限
+				iReceiveLen = this.miBufDataSite - iStopCharLen;
+				this.V(this.mresReceiveBuf);//归还缓存访问权限
+				if (iReceiveLen > 0)
+					break; //发现数据结束循环等待
+				else
+					SystemClock.sleep(50);//等待缓冲区被填入数据（死循环等待）
+			}
+			
 
 			//当缓冲池收到数据后，开始等待接收数据段
 			this.mbKillReceiveData_StopFlg = false; //可用killReceiveData_StopFlg()来终止阻塞状态
 			while(this.mbConectOk && !this.mbKillReceiveData_StopFlg){
 				/*复制末尾待检查终止符*/
+				this.P(this.mresReceiveBuf);//夺取缓存访问权限
 				for(int i=0; i<iStopCharLen; i++)
 					btCmp[i] = this.mbReceiveBufs[this.miBufDataSite - iStopCharLen + i];
 				this.V(this.mresReceiveBuf);//归还缓存访问权限

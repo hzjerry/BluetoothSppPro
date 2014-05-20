@@ -10,7 +10,7 @@ Software features:
      
 This tool three modules:
      1. Byte stream mode: the basic input-output model;
-     2. Keyboard mode: Can customize the output value of 12 buttons;
+     2. Keyboard mode: Can customize the output value of 12 buttons;Each button has three states(respectively: Down | Long-press | Up), each state can send commands event.
      3. Command Line: Set the command terminator for communication debugging.
 
 If the connected Bluetooth device is not paired, the system will automatically prompt you for pairing. Bluetooth pairing is successful, try to connect again.

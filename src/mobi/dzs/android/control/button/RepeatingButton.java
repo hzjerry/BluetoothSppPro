@@ -14,13 +14,6 @@ import android.widget.Button;
  *        与设置按钮的激活事件
  * */
 public class RepeatingButton extends Button{
-	/**长按事件标志*/
-	public static final byte mEVENT_REPEAT = 0x01;
-    /**按钮释放事件标志*/
-    public static final byte mEVENT_UP = 0x02;
-    /**按钮按下事件标志*/
-    public static final byte mEVENT_DOWN = 0x04;
-
 	/**记录长按开始时间 */
     private long mStartTime;
     /**记录已经重复执行次数的计数器*/
@@ -29,8 +22,6 @@ public class RepeatingButton extends Button{
     private ButtonPassListener mListener = null;
     /**Timer触发间隔，按下按钮后，每500ms执行一次*/
     private long mInterval = 500;
-    /**当前按钮工作的触发模式*/
-    private byte mEventMode = mEVENT_UP;
 
 	public RepeatingButton(Context context)	{
 		this(context, null);
@@ -45,47 +36,20 @@ public class RepeatingButton extends Button{
 	    setFocusable(true); //允许获得焦点
 	    setLongClickable(true); //启用长按事件
 	}
-
-	/**
-	 * 绑定UP/Down两种事件的侦听函数
-	 * @param ButtonPassListener l 按钮事件的侦听接口
-	 * @param int bFlg 激活的事件属性
-	 * @return void
-	 * @see <p>bFlg：如果需要联合属性可以相加<br/>
-	 * 		RepeatingButton.mEVENT_UP<br/>
-	 * 		RepeatingButton.mEVENT_DOWN<br/>
-	 *      </p>
-	 * */
-    public void bindListener(ButtonPassListener l, byte bFlg){
-        this.mListener = l;
-        this.mEventMode = bFlg;
-    }
-
 	/**
 	 * 绑定长按事件的侦听函数
 	 * @param long interval 长按执行频率ms
 	 * @param ButtonPassListener l 按钮事件的侦听接口
 	 * @return void
 	 * */
-    public void bindListener(long interval, ButtonPassListener l){
+    public void bindListener(ButtonPassListener l, long lHold_feq){
         this.mListener = l;
-        this.mInterval = interval;
-        this.mEventMode = mEVENT_REPEAT;
+        this.mInterval = lHold_feq;
     }
     
     /**设定重复执行的频率*/
     public void setRepeatFreq(long interval){
     	this.mInterval = interval;
-    }
-    
-    /**
-     * 获取当前按钮的事件模式
-     * @return 	 RepeatingButton.mEVENT_UP = UP<br/>
-	 * 		     RepeatingButton.mEVENT_DOWN = DOWN<br/>
-	 * 			 RepeatingButton.mEVENT_REPEAT = REPEAT<br/>
-     * */
-    public byte getEventMode(){
-    	return this.mEventMode;
     }
 
     /**
@@ -94,36 +58,23 @@ public class RepeatingButton extends Button{
      * */
     @Override
     public boolean performLongClick(){
-    	if ((this.mEventMode & mEVENT_REPEAT) > 0x00){	//启用了长按按钮事件
-	    	this.mStartTime = SystemClock.elapsedRealtime();
-	    	this.mRepeatCount = 0;
-	    	post(this.mRepeater);
-	        return true;
-    	}
-    	else
-    		return false;
+    	this.mStartTime = SystemClock.elapsedRealtime(); //记录开始执行长按的时间
+    	this.mRepeatCount = 0;
+    	post(this.mRepeater); //绑定需奥执行的长按时回调线程
+        return true;
     }
 
     /**
      * 这里是屏幕的处理事件
-     * @param MotionEvent event 点击的事件类型
+     * @param event MotionEvent  点击的事件类型
      * @return boolean
      * */
     @Override
     public boolean onTouchEvent(MotionEvent event){
         if (event.getAction() == MotionEvent.ACTION_UP){
-        	if ((this.mEventMode & mEVENT_REPEAT) != 0x00){	//启用长按事件后的处理
-	            removeCallbacks(this.mRepeater);
-	            if (this.mStartTime != 0){
-	                doRepeat(true);
-	                this.mStartTime = 0;
-	            }
-            }else if ((this.mEventMode & mEVENT_UP) != 0x00)
-        		this.doUp(); //按钮抬起时的处理
-        }else if (event.getAction() == MotionEvent.ACTION_DOWN &&
-        		 (this.mEventMode & mEVENT_DOWN) != 0x00
-        		)
-        {	//按钮被按下时的处理
+        	removeCallbacks(this.mRepeater); //结束回调长按线程
+        	this.doUp(); //按钮抬起时的处理
+        }else if (event.getAction() == MotionEvent.ACTION_DOWN ){ //按钮被按下时的处理
         	this.doDown();
         }
         return super.onTouchEvent(event);
@@ -131,17 +82,20 @@ public class RepeatingButton extends Button{
 
     /**用于处理长按的线程部分*/
     private Runnable mRepeater = new Runnable(){  //在线程中判断重复
+    	/** 首次调用长按事件的时间点（超过设定的长按频率时间后，执行长按事件） */
+    	private long lFirstRunTime = mStartTime + mInterval;
+    	/** 线程循环体 */
         public void run(){
-            doRepeat(false);
-            if (isPressed())
-            	/*将要执行的线程对象, 第二个参数是long类型：延迟的时间*/
+        	if (SystemClock.elapsedRealtime() > lFirstRunTime)//超过设定的长按频率时间后，执行长按事件
+        		doRepeat(false); //执行长安事件
+            if (isPressed()) //执行完成后，如果按钮还保持按住，则延迟后再次执行
                 postDelayed(this, mInterval); //计算长按后延迟下一次累加
         }
     };
 
     /**
      * 由线程控制的长按执行函数调用体
-     * @param boolean last 是否启用重复执行次数
+     * @param last boolean 是否启用重复执行次数
      * */
     public void doRepeat(boolean last){
         if (this.mListener != null)

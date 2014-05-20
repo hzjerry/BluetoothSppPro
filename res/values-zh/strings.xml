@@ -50,11 +50,13 @@
 	<string name="actKeyBoard_tv_set_btnname">显示名</string>
 	<string name="actKeyBoard_tv_set_btnname_hint">按钮的显示名字</string>
 	<string name="actKeyBoard_tv_long_pass_freq_hint">单位ms，必须>%1$d</string>
-	<string name="actKeyBoard_set_send_value">发送值</string>
-	<string name="actKeyBoard_set_send_value_hint">点击后的发送值</string>
+	<string name="actKeyBoard_set_btn_down_send_value">按下发送值</string>
+	<string name="actKeyBoard_set_btn_hold_send_value">长按发送值</string>
+	<string name="actKeyBoard_set_btn_up_send_value">释放发送值</string>
+	<string name="actKeyBoard_set_send_value_hint">发送的内容</string>
 	<string name="actKeyBoard_tv_set_keyboard_helper">当前为键盘设置模式，请点击按钮区中的按钮，设置每个按钮的属性。\n完成设置后点击菜单的【保存键盘配置】回到发送模式。\n</string>
 	<string name="actKeyBoard_msg_helper_endflg">当前结束符为 %1$s，如果需要更换指令结束符请选择菜单中的【设置结束符】进行设定；\n</string>
-	<string name="actKeyBoard_msg_repeat_freq_set">当前按钮长按时的促发频率为  %1$dms；</string>
+	<string name="actKeyBoard_msg_repeat_freq_set">当前按钮长按时的触发频率为  %1$dms；</string>
 	
 	<string name="actAbout_name">关于</string>
 	
@@ -89,9 +91,6 @@
 	<string name="menu_set_key_board_end">保存键盘配置</string>
 	<string name="menu_set_key_board_event">按钮激发模式</string>
 	<string name="menu_set_button_long_pass_freq">设定长按发送频率</string>
-    <string name="menu_button_event_up">释放时发送</string>
-    <string name="menu_button_event_down">按下时发送</string>
-    <string name="menu_button_event_repeat">长按持续发送</string>
     <string name="menu_about">关于</string>
 	
 	<string name="device_type_bredr">BR/EDR Bluetooth</string>

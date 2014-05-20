@@ -47,11 +47,13 @@
 	
 	<string name="actKeyBoard_name">Keyboard mode</string>
 	<string name="actKeyBoard_tv_Init">Set the buttons properties, click [Set end flag]. \n</string>
-	<string name="actKeyBoard_tv_set_btnname">Btn name:</string>
-	<string name="actKeyBoard_tv_set_btnname_hint">display name</string>
+	<string name="actKeyBoard_tv_set_btnname">BTN Name</string>
+	<string name="actKeyBoard_tv_set_btnname_hint">button display name</string>
 	<string name="actKeyBoard_tv_long_pass_freq_hint">Unit ms，must be >%1$d</string>
-	<string name="actKeyBoard_set_send_value">Send val:</string>
-	<string name="actKeyBoard_set_send_value_hint">Click after sending</string>
+    <string name="actKeyBoard_set_btn_down_send_value">BTN Down </string>
+    <string name="actKeyBoard_set_btn_hold_send_value">BTN Hold</string>
+    <string name="actKeyBoard_set_btn_up_send_value">BTN Up</string>
+    <string name="actKeyBoard_set_send_value_hint">Input send value</string>
 	<string name="actKeyBoard_tv_set_keyboard_helper">Now is the keyboard setting mode, Click the button area that setting.\n Click [Buttons set complete]back to send mode.\n</string>
 	<string name="actKeyBoard_msg_helper_endflg">Command line last chars is: %1$s;\n</string>
 	<string name="actKeyBoard_msg_repeat_freq_set">Long-press the trigger frequency: %1$dms;</string>
@@ -63,7 +65,7 @@
 	<string name="dialog_title_io_mode_set">IO mode selection</string>
 	<string name="dialog_title_end_flg">Set end flag</string>
 	<string name="dialog_title_keyboard_set">Button Function setting</string>
-	<string name="dialog_title_keyboard_long_pass_frea">Set long-press repeatedly(ms)</string>
+	<string name="dialog_title_keyboard_long_pass_frea">Long-press repeatedly freq(ms)</string>
 	<string name="dialog_io_mode_input_set">Input type</string>
 	<string name="dialog_io_mode_output_set">Output type</string>
 	<string name="dialog_io_mode_ascii">ASCII</string>
@@ -80,7 +82,7 @@
 	<string name="tv_receive_area_title">Received data area</string>
 	<string name="menu_close">Close</string>
 	<string name="menu_clear">Clear</string>
-	<string name="menu_io_mode">Set IO Mode</string>
+	<string name="menu_io_mode">Set IO mode</string>
 	<string name="menu_save_to_file">Save2File</string>
 	<string name="menu_clear_cmd_history">Clear History</string>
 	<string name="menu_set_stop_flg">Set end flag</string>
@@ -88,10 +90,7 @@
 	<string name="menu_set_key_board_start">Buttons set</string>
 	<string name="menu_set_key_board_end">Buttons set complete</string>
 	<string name="menu_set_key_board_event">Set trigger mode</string>
-	<string name="menu_set_button_long_pass_freq">set repeat freq</string>
-    <string name="menu_button_event_up">Release to send</string>
-    <string name="menu_button_event_down">Pass down to send</string>
-    <string name="menu_button_event_repeat">Long-press to send repeatedly</string>
+	<string name="menu_set_button_long_pass_freq">Set Long-press freq</string>
     <string name="menu_about">About</string>
 	
 	<string name="device_type_bredr">BR/EDR Bluetooth</string>

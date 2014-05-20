@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import mobi.dzs.android.bluetooth.BluetoothCtrl;
+import mobi.dzs.android.storage.CKVStorage;
+import mobi.dzs.android.storage.CSharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -170,6 +172,7 @@ public class actMain extends Activity{
 			Toast.makeText(this, "Bluetooth module not found", Toast.LENGTH_LONG).show();
 			this.finish();
 		}
+		this.initFirstInstallTimestemp(); //记录首次安装的时间
 
 		this.mtvDeviceInfo = (TextView)this.findViewById(R.id.actMain_tv_device_info);
 		this.mtvServiceUUID = (TextView)this.findViewById(R.id.actMain_tv_service_uuid);
@@ -183,6 +186,16 @@ public class actMain extends Activity{
 		this.mGP = ((globalPool)this.getApplicationContext()); //得到全局对象的引用
 		
 		new startBluetoothDeviceTask().execute(""); //启动蓝牙设备
+	}
+	
+	/**
+	 * 初始化首次安装程序的时间
+	 */
+	private void initFirstInstallTimestemp(){
+		CKVStorage oDS = new CSharedPreferences(this);
+		if (oDS.getLongVal("SYSTEM", "FIRST_INSTALL_TIMESTEMP") == 0){
+			oDS.setVal("SYSTEM", "FIRST_INSTALL_TIMESTEMP", System.currentTimeMillis()).saveStorage();
+		}
 	}
 	
 	/**

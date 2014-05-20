@@ -8,17 +8,15 @@ import android.view.View;
  * */
 public interface ButtonPassListener{
 	/**长按按钮事件
-	 * @param View v 按钮对象
-	 * @param long duration 延迟毫秒数
-	 * @param int repeatcount 重复调用次数
+	 * @param v View  按钮对象
+	 * @param duration long  延迟毫秒数
+	 * @param repeatcount int  重复调用次数
 	 * */
     void onRepeat(View v, long duration, int repeatcount);
-
     /**
      * 按钮被按下的处理事件
      * */
     void onUp(View v);
-
     /**
      * 被按下的按钮抬起时的事件
      * */

@@ -28,16 +28,52 @@
 	  android:layout_width="fill_parent"
 	  android:layout_height="wrap_content">
 	    <TextView
-	    	android:text="@string/actKeyBoard_set_send_value"
+	    	android:text="@string/actKeyBoard_set_btn_down_send_value"
 	    	android:layout_weight="3" 
 	    	android:singleLine="true"
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content" />
-	    <EditText android:id="@+id/et_keyboard_set_SendValue"
+	    <EditText android:id="@+id/et_keyboard_set_btn_down_value"
 	    	android:hint="@string/actKeyBoard_set_send_value_hint"
 	    	android:singleLine="true"
 	    	android:layout_weight="1" 
 	    	android:layout_height="wrap_content"	    	
 	    	android:layout_width="fill_parent" />
 	</LinearLayout>
+	
+    <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/actKeyBoard_set_btn_hold_send_value"
+            android:layout_weight="3" 
+            android:singleLine="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <EditText android:id="@+id/et_keyboard_set_btn_hold_value"
+            android:hint="@string/actKeyBoard_set_send_value_hint"
+            android:singleLine="true"
+            android:layout_weight="1" 
+            android:layout_height="wrap_content"            
+            android:layout_width="fill_parent" />
+    </LinearLayout>
+    
+    <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+        <TextView
+            android:text="@string/actKeyBoard_set_btn_up_send_value"
+            android:layout_weight="3" 
+            android:singleLine="true"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <EditText android:id="@+id/et_keyboard_set_btn_up_value"
+            android:hint="@string/actKeyBoard_set_send_value_hint"
+            android:singleLine="true"
+            android:layout_weight="1" 
+            android:layout_height="wrap_content"            
+            android:layout_width="fill_parent" />
+    </LinearLayout>
 </LinearLayout>
