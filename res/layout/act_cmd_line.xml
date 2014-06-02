@@ -35,6 +35,7 @@
         <TextView android:id="@+id/actCmdLine_tv_data_view"
             android:text="@string/actCmdLine_msg_helper"
             android:singleLine="false"
+            android:typeface="monospace"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             />
