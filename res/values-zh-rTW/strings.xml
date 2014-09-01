@@ -95,7 +95,7 @@
 
     <string name="device_type_bredr">BR/EDR Bluetooth</string>
     <string name="device_type_ble">Low Energy Bluetooth</string>
-    <string name="device_type_dumo">Duplex mode luetooth</string>
+    <string name="device_type_dumo">Duplex mode Bluetooth</string>
 
     <string name="templet_txd">Txd: %1$dB</string>
     <string name="templet_rxd">Rxd: %1$dB</string>

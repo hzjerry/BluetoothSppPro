@@ -291,7 +291,7 @@ public class actKeyBoard extends BaseCommActivity{
 	        	this.saveData2File();
 	        	return true;
 	        case MEMU_HELPER: //显示使用向导
-	        	if (this.getString(R.string.language).toString().equals("cn"))
+	        	if (this.getString(R.string.language).toString().substring(0, 2).equals("zh"))
 	        		this.mtvRecView.setText(this.getStringFormRawFile(R.raw.key_board_cn) +"\n\n");
 	        	else
 	        		this.mtvRecView.setText(this.getStringFormRawFile(R.raw.key_board_en) +"\n");
