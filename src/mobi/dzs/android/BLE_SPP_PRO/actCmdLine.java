@@ -171,7 +171,7 @@ public class actCmdLine extends BaseCommActivity{
 	        	this.clearAutoComplate(this.mactvInput);
 	        	return true;
 	        case MEMU_HELPER: //显示使用向导
-	        	if (this.getString(R.string.language).toString().equals("cn"))
+	        	if (this.getString(R.string.language).toString().substring(0, 2).equals("zh"))
 	        		this.mtvDataView.setText(this.getStringFormRawFile(R.raw.cmd_line_cn) +"\n\n");
 	        	else
 	        		this.mtvDataView.setText(this.getStringFormRawFile(R.raw.cmd_line_en) +"\n");

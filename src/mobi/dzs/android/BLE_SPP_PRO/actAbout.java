@@ -19,7 +19,7 @@ public class actAbout extends BaseActivity{
 		
 		this.mtvShow = (TextView)this.findViewById(R.id.actAbout_tv_show);
 		
-    	if (this.getString(R.string.language).toString().equals("cn"))
+    	if (this.getString(R.string.language).toString().substring(0, 2).equals("zh"))
     		this.mtvShow.setText(this.getStringFormRawFile(R.raw.about_cn) +"\n\n");
     	else
     		this.mtvShow.setText(this.getStringFormRawFile(R.raw.about_en) +"\n");

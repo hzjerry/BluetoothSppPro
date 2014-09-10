@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Bluetooth spp pro</string>
-	<string name="language">en</string>	
-	
+	<string name="language">en</string>
+
 	<string name="actMain_name">Bluetooth spp pro</string>
 	<string name="actMain_link_device_info_title">Connect the device:</string>
 	<string name="actMain_link_device_service_uuid">Service\'s UUID：</string>
@@ -22,7 +22,7 @@
 	<string name="actMain_msg_bluetooth_Bond_fail">Pairing failed</string>
 	<string name="actMain_msg_pair_pwd_error">The pairing password must be 4 digits</string>
 	<string name="actMain_menu_rescan">Rescan</string>
-	
+
 	<string name="actDiscovery_name">Scan Device</string>
 	<string name="actDiscovery_msg_select_device">Select the device you need to connect</string>
 	<string name="actDiscovery_msg_not_find_device">Devices not found</string>
@@ -33,18 +33,18 @@
 	<string name="actDiscovery_menu_scan">Scan</string>
 	<string name="actDiscovery_bond_bonded">Bonded</string>
 	<string name="actDiscovery_bond_nothing">Nothing</string>
-	
+
 	<string name="actByteStream_name">Byte stream mode</string>
 	<string name="actByteStream_input_hint">input the send commands</string>
 	<string name="actByteStream_btn_send_desc">Send button</string>
 	<string name="actByteStream_tv_receive_text">Data receive</string>
-	
+
 	<string name="actCmdLine_name">CMD line mode</string>
 	<string name="actCmdLine_input_hint">input char (press [Enter] key)</string>
 	<string name="actCmdLine_msg_helper">Current end flag: %1$s,Click [send] button finished sending, at the soft keyboard;\n\n</string>
 	<string name="actCmdLine_dialog_title_end_flg">Set command end flag</string>
 	<string name="actCmdLine_et_hint_end_flg_val">Command end flag(HEX format)</string>
-	
+
 	<string name="actKeyBoard_name">Keyboard mode</string>
 	<string name="actKeyBoard_tv_Init">Set the buttons properties, click [Set end flag]. \n</string>
 	<string name="actKeyBoard_tv_set_btnname">BTN Name</string>
@@ -57,9 +57,9 @@
 	<string name="actKeyBoard_tv_set_keyboard_helper">Now is the keyboard setting mode, Click the button area that setting.\n Click [Buttons set complete]back to send mode.\n</string>
 	<string name="actKeyBoard_msg_helper_endflg">Command line last chars is: %1$s;\n</string>
 	<string name="actKeyBoard_msg_repeat_freq_set">Long-press the trigger frequency: %1$dms;</string>
-	
+
 	<string name="actAbout_name">About me</string>
-	
+
 	<string name="dialog_title_sys_err">System Error</string>
 	<string name="dialog_title_alert">Alert</string>
 	<string name="dialog_title_io_mode_set">IO mode selection</string>
@@ -75,7 +75,7 @@
 	<string name="dialog_end_flg_n">Char(\'\\n\')</string>
 	<string name="dialog_end_flg_other">Other</string>
 	<string name="dialog_end_flg_hex_val">HEX value of the end flag:</string>
-	
+
 	<string name="btn_ok">OK</string>
 	<string name="btn_click_me">ClickMe</string>
 	<string name="tv_send_area_title">Sent data area</string>
@@ -92,15 +92,15 @@
 	<string name="menu_set_key_board_event">Set trigger mode</string>
 	<string name="menu_set_button_long_pass_freq">Set Long-press freq</string>
     <string name="menu_about">About</string>
-	
+
 	<string name="device_type_bredr">BR/EDR Bluetooth</string>
 	<string name="device_type_ble">Low Energy Bluetooth</string>
-	<string name="device_type_dumo">Duplex mode luetooth</string>
-	
+	<string name="device_type_dumo">Duplex mode Bluetooth</string>
+
 	<string name="templet_txd">Txd: %1$dB</string>
 	<string name="templet_rxd">Rxd: %1$dB</string>
 	<string name="templet_hold_time">Running: %1$ds</string>
-	
+
 	<string name="msg_send_data_fail">Failed to send data</string>
 	<string name="msg_not_hex_string">Invalid HEX string</string>
 	<string name="msg_save_file_fail">Failed to save the file</string>
@@ -108,7 +108,7 @@
 	<string name="msg_receive_data_stop">Receiver terminated</string>
 	<string name="msg_msg_bt_connect_lost">Bluetooth device communications connection is lost, try to reconnect</string>
 	<string name="msg_helper_endflg_nothing">End flag is not set. Click [Set end flag] set;\n</string>
-	
+
 	<string name="tips_click_to_hide">Click hidden</string>
 	<string name="tips_click_to_show">Click show</string>
 </resources>
