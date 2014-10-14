@@ -124,8 +124,10 @@ public class actByteStream extends BaseCommActivity{
 	        	this.clearAutoComplate(this.mactvInput);
 	        	return true;
 	        case MEMU_HELPER: //Display using the wizard
-	        	if (this.getString(R.string.language).toString().substring(0, 2).equals("zh"))
+	        	if (this.getString(R.string.language).toString().equals("zh-rCN"))
 	        		this.mtvReceive.setText(this.getStringFormRawFile(R.raw.byte_stream_cn) +"\n\n");
+	        	else if (this.getString(R.string.language).toString().equals("zh-rTW"))
+	        		this.mtvReceive.setText(this.getStringFormRawFile(R.raw.byte_stream_tw) +"\n\n");
 	        	else
 	        		this.mtvReceive.setText(this.getStringFormRawFile(R.raw.byte_stream_en) +"\n");
 	        	return true;
