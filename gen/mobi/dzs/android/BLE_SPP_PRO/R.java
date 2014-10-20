@@ -96,12 +96,16 @@ public final class R {
     public static final class raw {
         public static final int about_cn=0x7f040000;
         public static final int about_en=0x7f040001;
-        public static final int byte_stream_cn=0x7f040002;
-        public static final int byte_stream_en=0x7f040003;
-        public static final int cmd_line_cn=0x7f040004;
-        public static final int cmd_line_en=0x7f040005;
-        public static final int key_board_cn=0x7f040006;
-        public static final int key_board_en=0x7f040007;
+        public static final int about_tw=0x7f040002;
+        public static final int byte_stream_cn=0x7f040003;
+        public static final int byte_stream_en=0x7f040004;
+        public static final int byte_stream_tw=0x7f040005;
+        public static final int cmd_line_cn=0x7f040006;
+        public static final int cmd_line_en=0x7f040007;
+        public static final int cmd_line_tw=0x7f040008;
+        public static final int key_board_cn=0x7f040009;
+        public static final int key_board_en=0x7f04000a;
+        public static final int key_board_tw=0x7f04000b;
     }
     public static final class string {
         public static final int actAbout_name=0x7f050034;

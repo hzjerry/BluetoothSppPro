@@ -19,8 +19,10 @@ public class actAbout extends BaseActivity{
 		
 		this.mtvShow = (TextView)this.findViewById(R.id.actAbout_tv_show);
 		
-    	if (this.getString(R.string.language).toString().substring(0, 2).equals("zh"))
+    	if (this.getString(R.string.language).toString().equals("zh-rCN"))
     		this.mtvShow.setText(this.getStringFormRawFile(R.raw.about_cn) +"\n\n");
+    	else if (this.getString(R.string.language).toString().equals("zh-rTW"))
+    		this.mtvShow.setText(this.getStringFormRawFile(R.raw.about_tw) +"\n\n");
     	else
     		this.mtvShow.setText(this.getStringFormRawFile(R.raw.about_en) +"\n");
 	}
